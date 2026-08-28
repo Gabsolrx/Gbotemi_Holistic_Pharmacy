@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head><script>window.onerror = function(msg, src, lineno, colno, error) { fetch('/api/log', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({msg, lineno, colno, stack: error?.stack}) }) }; window.onunhandledrejection = function(e) { fetch('/api/log', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({msg: e.reason?.message, stack: e.reason?.stack}) }) };</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gbotemi Holistic Pharmacy</title>
+    <meta name="description" content="A comprehensive digital pharmacy platform for Nigeria featuring online pharmacy, telepharmacy, and AI healthcare assistance." />
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <meta property="og:title" content="Gbotemi Holistic Pharmacy" />
+    <meta property="og:description" content="A comprehensive digital pharmacy platform for Nigeria featuring online pharmacy, telepharmacy, and AI healthcare assistance." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
