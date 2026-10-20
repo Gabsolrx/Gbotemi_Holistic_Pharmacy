@@ -19,9 +19,14 @@ import { AccountLayout } from './components/account/AccountLayout';
 import { AdminLayout } from './components/admin/AdminLayout';
 import AIChatWidget from './components/ui/AIChatWidget';
 
-// Lazy loaded routes for maximum performance & fast mobile loading (< 3s)
+// Core routes imported statically for instant response and zero chunk errors
+import PrescriptionUpload from './pages/PrescriptionUpload';
+import Consultation from './pages/Consultation';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/Dashboard';
+
+// Lazy loaded secondary routes
 const Login = lazy(() => import('./pages/auth/Login'));
-const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const Signup = lazy(() => import('./pages/auth/Signup'));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
@@ -31,15 +36,12 @@ const Orders = lazy(() => import('./pages/account/Orders'));
 const Profile = lazy(() => import('./pages/account/Profile'));
 const Wishlist = lazy(() => import('./pages/account/Wishlist'));
 
-const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminOrders = lazy(() => import('./pages/admin/Orders'));
 const AdminProducts = lazy(() => import('./pages/admin/Products'));
 const AdminCustomers = lazy(() => import('./pages/admin/Customers'));
 const AdminBlog = lazy(() => import('./pages/admin/Blog'));
 const AdminCMS = lazy(() => import('./pages/admin/CMS'));
 
-const PrescriptionUpload = lazy(() => import('./pages/PrescriptionUpload'));
-const Consultation = lazy(() => import('./pages/Consultation'));
 const Contact = lazy(() => import('./pages/Contact'));
 const HealthTools = lazy(() => import('./pages/HealthTools'));
 const Blog = lazy(() => import('./pages/Blog'));
@@ -71,19 +73,27 @@ export default function App() {
       <AIChatWidget />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Admin Routes */}
-          <Route path="admin" element={
+          {/* Dedicated Admin Portal Routes */}
+          <Route path="/admin" element={
             <ProtectedRoute requireAdmin={true}>
               <AdminLayout />
             </ProtectedRoute>
           }>
             <Route index element={<AdminDashboard />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="blog" element={<AdminBlog />} />
             <Route path="cms" element={<AdminCMS />} />
             <Route path="customers" element={<AdminCustomers />} />
+            <Route path="login" element={<AdminLogin />} />
           </Route>
+          
+          {/* Dedicated Admin Login & Dashboard Aliases */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin-dashboard" element={<Navigate to="/admin" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/admin" replace />} />
 
           {/* Storefront Routes */}
           <Route path="/" element={<MainLayout />}>
@@ -101,9 +111,43 @@ export default function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="checkout/success" element={<CheckoutSuccess />} />
-            <Route path="upload-prescription" element={<Navigate to="/prescription" replace />} />
-            <Route path="prescription" element={<ProtectedRoute><PrescriptionUpload /></ProtectedRoute>} />
-            <Route path="consultation" element={<ProtectedRoute><Consultation /></ProtectedRoute>} />
+            
+            {/* Public Prescription Upload routes & comprehensive aliases */}
+            <Route path="prescription" element={<PrescriptionUpload />} />
+            <Route path="prescriptions" element={<PrescriptionUpload />} />
+            <Route path="upload-prescription" element={<PrescriptionUpload />} />
+            <Route path="prescription-upload" element={<PrescriptionUpload />} />
+            <Route path="upload_prescription" element={<PrescriptionUpload />} />
+            <Route path="prescription_upload" element={<PrescriptionUpload />} />
+            <Route path="prescription/upload" element={<PrescriptionUpload />} />
+            <Route path="prescription-assistance" element={<PrescriptionUpload />} />
+            <Route path="upload" element={<PrescriptionUpload />} />
+            <Route path="rx" element={<PrescriptionUpload />} />
+            <Route path="rx-upload" element={<PrescriptionUpload />} />
+            <Route path="services/prescription" element={<PrescriptionUpload />} />
+            <Route path="services/prescriptions" element={<PrescriptionUpload />} />
+            <Route path="services/prescription-management" element={<PrescriptionUpload />} />
+            <Route path="services/upload-prescription" element={<PrescriptionUpload />} />
+            
+            {/* Public Telepharmacy Consultation routes & comprehensive aliases */}
+            <Route path="consultation" element={<Consultation />} />
+            <Route path="consultations" element={<Consultation />} />
+            <Route path="telepharmacy" element={<Consultation />} />
+            <Route path="telepharmacy-consultation" element={<Consultation />} />
+            <Route path="telepharmacy_consultation" element={<Consultation />} />
+            <Route path="telepharmacy-consultations" element={<Consultation />} />
+            <Route path="tele-pharmacy" element={<Consultation />} />
+            <Route path="telepharmacy/consultation" element={<Consultation />} />
+            <Route path="consult" element={<Consultation />} />
+            <Route path="book-consultation" element={<Consultation />} />
+            <Route path="talk-to-a-pharmacist" element={<Consultation />} />
+            <Route path="consult-pharmacist" element={<Consultation />} />
+            <Route path="services/telepharmacy" element={<Consultation />} />
+            <Route path="services/consultation" element={<Consultation />} />
+            <Route path="services/telepharmacy-consultation" element={<Consultation />} />
+            <Route path="services/telepharmacy-consultations" element={<Consultation />} />
+            <Route path="services/holistic-counseling" element={<Consultation />} />
+            
             <Route path="health-tools" element={<HealthTools />} />
             <Route path="contact" element={<Contact />} />
             <Route path="blog" element={<Blog />} />
@@ -113,6 +157,7 @@ export default function App() {
             {/* Auth Routes */}
             <Route path="login" element={<AdminLogin />} />
             <Route path="customer-login" element={<Login />} />
+            <Route path="user-login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
@@ -129,7 +174,7 @@ export default function App() {
               <Route path="wishlist" element={<Wishlist />} />
             </Route>
 
-            {/* 404 */}
+            {/* 404 Catch-All */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

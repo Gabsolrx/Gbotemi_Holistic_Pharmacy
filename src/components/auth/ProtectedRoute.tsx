@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import AdminLogin from '../../pages/admin/AdminLogin';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -20,16 +21,16 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
   }
 
   if (!user) {
-    // Redirect to login but save the attempted URL
+    // For admin routes, show the Admin Login form directly in place to avoid redirect 404s
     if (requireAdmin) {
-      return <Navigate to="/login" state={{ from: location }} replace />;
+      return <AdminLogin />;
     }
-    return <Navigate to="/user-login" state={{ from: location }} replace />;
+    return <Navigate to="/customer-login" state={{ from: location }} replace />;
   }
 
   if (requireAdmin && user?.role !== 'admin' && user?.role !== 'super_admin') {
-    // Redirect to admin login so user can authenticate with admin credentials
-    return <Navigate to="/login" state={{ from: location, unauthorized: true }} replace />;
+    // Show admin login form with unauthorized state so admin credentials can be entered
+    return <AdminLogin />;
   }
 
   return <>{children}</>;
