@@ -48,10 +48,14 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Image */}
       <Link to={`/products/${product.slug}`} className="relative aspect-square p-6 flex items-center justify-center bg-gray-50/50">
         <img 
-          src={product.image_url || "https://placehold.co/400x400?text=Product"} 
+          src={product.imageUrl || product.image_url || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400&h=400'} 
           alt={product.name}
           referrerPolicy="no-referrer"
           className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400&h=400';
+          }}
         />
       </Link>
 

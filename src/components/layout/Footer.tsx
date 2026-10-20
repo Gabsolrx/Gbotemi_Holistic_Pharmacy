@@ -20,7 +20,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-primary-900 text-primary-50 pt-16 pb-8 border-t-4 border-accent-orange">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
           {/* Column 1: About & Contact */}
@@ -82,6 +82,7 @@ export default function Footer() {
               <li><Link to="/about" className="hover:text-white hover:underline transition-colors">About Us</Link></li>
               <li><Link to="/contact" className="hover:text-white hover:underline transition-colors">Contact Us</Link></li>
               <li><Link to="/delivery-information" className="hover:text-white hover:underline transition-colors">Delivery Information</Link></li>
+              <li><Link to="/payment-information" className="hover:text-white hover:underline transition-colors">Payment Information</Link></li>
               <li><Link to="/faq" className="hover:text-white hover:underline transition-colors">FAQs</Link></li>
               <li><Link to="/privacy-policy" className="hover:text-white hover:underline transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-white hover:underline transition-colors">Terms & Conditions</Link></li>
@@ -94,7 +95,7 @@ export default function Footer() {
         {/* Newsletter & Bottom */}
         <div className="border-t border-primary-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-sm text-primary-200">
-            &copy; {new Date().getFullYear()} All rights reserved by GabsolTeck
+            &copy; 2026 Gbotemi Holistic Pharmacy. All Right Reserved.  GabsolTeck
           </div>
           
           <div className="flex items-center gap-4">

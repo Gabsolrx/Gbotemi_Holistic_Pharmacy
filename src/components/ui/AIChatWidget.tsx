@@ -82,13 +82,36 @@ export default function AIChatWidget() {
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Floating AI Assistant Launcher Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 right-6 p-4 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 hover:scale-105 transition-all z-40 flex items-center justify-center ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
-        aria-label="Open AI Assistant"
+        className={`fixed bottom-24 right-6 w-14 h-14 rounded-full shadow-lg shadow-emerald-950/25 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 z-40 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 bg-transparent p-0 border-0 ${
+          isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
+        }`}
+        aria-label="Open Pharmacy AI Health Assistant"
       >
-        <MessageSquare size={24} />
+        {/* Exact Pharmacy AI Green & White Icon - Undistorted */}
+        <img
+          src="https://i.ibb.co/4gPZw7Tf/pharmacy-ai-green-white.png"
+          alt="pharmacy ai green white"
+          className="w-full h-full object-contain rounded-full select-none relative z-10 drop-shadow-xs"
+          onError={(e) => {
+            e.currentTarget.src = '/pharmacy-ai-green-white.png';
+          }}
+        />
+
+        {/* Pulse waves identical to WhatsApp FAB */}
+        <span 
+          className="absolute inset-0 rounded-full bg-emerald-500 opacity-35 animate-ping pointer-events-none" 
+          style={{ animationDuration: '2s' }} 
+        />
+        <span className="absolute -inset-1 rounded-full border-2 border-emerald-500/40 animate-pulse pointer-events-none" />
+
+        {/* Accessible Hover Tooltip */}
+        <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-3.5 py-2 bg-gray-900/95 text-white text-xs sm:text-sm font-medium rounded-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-lg flex items-center gap-2 z-20">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Ask AI Health Assistant</span>
+        </div>
       </button>
 
       {/* Chat Window */}
@@ -98,14 +121,24 @@ export default function AIChatWidget() {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-primary-600 text-white rounded-t-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gradient-to-r from-emerald-800 to-primary-700 text-white rounded-t-2xl">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <Bot size={18} />
+            <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden shadow-xs flex-shrink-0 bg-white/10">
+              <img
+                src="https://i.ibb.co/4gPZw7Tf/pharmacy-ai-green-white.png"
+                alt="pharmacy ai green white"
+                className="w-full h-full object-contain rounded-full"
+                onError={(e) => {
+                  e.currentTarget.src = '/pharmacy-ai-green-white.png';
+                }}
+              />
             </div>
             <div>
-              <h3 className="font-bold text-sm">Gbotemi Assistant</h3>
-              <p className="text-xs text-primary-100">AI Powered</p>
+              <h3 className="font-bold text-sm flex items-center gap-1.5">
+                <span>Gbotemi Assistant</span>
+                <span className="text-[10px] bg-emerald-500/30 text-emerald-100 px-1.5 py-0.5 rounded font-semibold">AI</span>
+              </h3>
+              <p className="text-xs text-primary-100">Intelligent Healthcare Guidance</p>
             </div>
           </div>
           <button 
@@ -124,10 +157,21 @@ export default function AIChatWidget() {
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`flex gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  msg.role === 'user' ? 'bg-gray-200 text-gray-600' : 'bg-primary-100 text-primary-700'
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden ${
+                  msg.role === 'user' ? 'bg-gray-200 text-gray-600' : 'bg-transparent'
                 }`}>
-                  {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
+                  {msg.role === 'user' ? (
+                    <User size={16} />
+                  ) : (
+                    <img
+                      src="https://i.ibb.co/4gPZw7Tf/pharmacy-ai-green-white.png"
+                      alt="pharmacy ai green white"
+                      className="w-full h-full object-contain rounded-full"
+                      onError={(e) => {
+                        e.currentTarget.src = '/pharmacy-ai-green-white.png';
+                      }}
+                    />
+                  )}
                 </div>
                 <div className={`px-4 py-2.5 rounded-2xl text-sm ${
                   msg.role === 'user' 
@@ -142,8 +186,15 @@ export default function AIChatWidget() {
           {isLoading && (
             <div className="flex justify-start">
               <div className="flex gap-2 max-w-[85%]">
-                <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center flex-shrink-0">
-                  <Bot size={16} />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <img
+                    src="https://i.ibb.co/4gPZw7Tf/pharmacy-ai-green-white.png"
+                    alt="pharmacy ai green white"
+                    className="w-full h-full object-contain rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = '/pharmacy-ai-green-white.png';
+                    }}
+                  />
                 </div>
                 <div className="px-4 py-3 rounded-2xl text-sm bg-white border border-gray-100 text-gray-800 rounded-tl-none shadow-sm flex items-center gap-2">
                   <Loader2 size={16} className="animate-spin text-primary-600" />

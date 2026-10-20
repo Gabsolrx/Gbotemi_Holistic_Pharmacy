@@ -130,9 +130,9 @@ export default function AdminProducts() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
-                          {product.image_url ? (
+                          {(product.imageUrl || product.image_url) ? (
                             <img 
-                              src={product.image_url} 
+                              src={product.imageUrl || product.image_url} 
                               alt={product.name} 
                               className="w-full h-full object-cover" 
                               referrerPolicy="no-referrer"

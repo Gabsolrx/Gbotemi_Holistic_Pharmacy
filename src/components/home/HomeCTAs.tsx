@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 export function HomeCTAs() {
   return (
     <section className="py-16 bg-slate-50">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="grid md:grid-cols-2 gap-8">
           
           {/* Prescription CTA */}

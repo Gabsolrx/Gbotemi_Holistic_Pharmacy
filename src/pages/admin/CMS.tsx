@@ -406,7 +406,7 @@ export default function AdminCMS() {
                           <GripVertical size={20} />
                         </div>
                         <img 
-                          src={product.image_url} 
+                          src={product.imageUrl || product.image_url || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=100&h=100'} 
                           alt={product.name} 
                           className="w-10 h-10 rounded object-cover border border-slate-100" 
                         />

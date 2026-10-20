@@ -75,6 +75,6 @@ export const blogPosts = [
     author: 'Pharm Michael',
     date: '2023-11-05',
     readTime: '6 min read',
-    imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5e45a8ec6?auto=format&fit=crop&q=80&w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
   }
 ];

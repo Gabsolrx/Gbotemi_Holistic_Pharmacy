@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, ShieldCheck, Truck, ShoppingCart, Heart, Share2, Info, AlertTriangle, Loader2 } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Star, ShieldCheck, Truck, ShoppingCart, Heart, Share2, Info, AlertTriangle, Loader2, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { formatCurrency, calculateDiscount } from '../utils/format';
@@ -10,6 +10,7 @@ import NotFound from './NotFound';
 
 export default function ProductDetails() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
@@ -51,16 +52,35 @@ export default function ProductDetails() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8">
+    <div className="bg-slate-50 min-h-screen py-6 sm:py-8">
       <div className="container mx-auto px-4">
         
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-          <Link to="/" className="hover:text-primary-700">Home</Link>
-          <span>/</span>
-          <Link to="/shop" className="hover:text-primary-700">Shop</Link>
-          <span>/</span>
-          <span className="text-gray-900 font-medium truncate">{product.name}</span>
+        {/* Navigation: Back to Continue Shopping button & Breadcrumbs */}
+        <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate('/shop');
+              }
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-sm font-bold text-gray-900 hover:text-emerald-700 hover:border-emerald-500 hover:bg-emerald-50 shadow-xs transition-all cursor-pointer group active:scale-95"
+            aria-label="Back to Continue Shopping"
+          >
+            <ArrowLeft size={18} className="text-gray-700 group-hover:text-emerald-700 group-hover:-translate-x-0.5 transition-transform" />
+            <span>← Back to Continue Shopping</span>
+          </button>
+
+          {/* Breadcrumbs */}
+          <div className="hidden sm:flex items-center gap-2 text-xs sm:text-sm text-gray-500">
+            <Link to="/" className="hover:text-primary-700">Home</Link>
+            <span>/</span>
+            <Link to="/shop" className="hover:text-primary-700">Shop</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium truncate max-w-xs">{product.name}</span>
+          </div>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-12">
@@ -68,15 +88,35 @@ export default function ProductDetails() {
             
             {/* Image Gallery */}
             <div className="p-8 md:p-12 md:border-r border-gray-100 flex items-center justify-center bg-gray-50/50 relative">
-              <div className="absolute top-6 left-6 flex flex-col gap-2">
+              {/* Mobile back to continue shopping badge */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    navigate(-1);
+                  } else {
+                    navigate('/shop');
+                  }
+                }}
+                className="md:hidden absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/95 backdrop-blur-xs border border-gray-300 text-xs font-bold text-gray-800 shadow-xs hover:bg-emerald-50 hover:text-emerald-700 active:scale-95 cursor-pointer"
+              >
+                <ArrowLeft size={14} className="text-emerald-700" />
+                <span>Continue Shopping</span>
+              </button>
+
+              <div className="absolute top-12 left-3 md:top-6 md:left-6 flex flex-col gap-2">
                 {discount > 0 && <Badge variant="danger">-{discount}%</Badge>}
                 {product.prescription_required && <Badge variant="warning">Prescription Required</Badge>}
               </div>
               <img 
-                src={product.image_url || "https://placehold.co/400x400?text=Product"} 
+                src={product.imageUrl || product.image_url || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600&h=600'} 
                 alt={product.name}
                 referrerPolicy="no-referrer"
                 className="w-full max-w-md object-contain mix-blend-multiply"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600&h=600';
+                }}
               />
             </div>
 
@@ -178,13 +218,31 @@ export default function ProductDetails() {
 
               {/* Secondary Actions */}
               <div className="flex items-center gap-6 border-t border-gray-100 pt-6">
-                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-accent-orange font-medium transition-colors">
+                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-accent-orange font-medium transition-colors cursor-pointer">
                   <Heart size={18} />
                   Add to Wishlist
                 </button>
-                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 font-medium transition-colors">
+                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 font-medium transition-colors cursor-pointer">
                   <Share2 size={18} />
                   Share Product
+                </button>
+              </div>
+
+              {/* Continue Shopping Action */}
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.history.length > 1) {
+                      navigate(-1);
+                    } else {
+                      navigate('/shop');
+                    }
+                  }}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-gray-200 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-300 text-gray-800 hover:text-emerald-800 font-bold text-sm transition-all cursor-pointer active:scale-98 shadow-2xs"
+                >
+                  <ArrowLeft size={16} />
+                  <span>Back to Continue Shopping</span>
                 </button>
               </div>
 
@@ -195,8 +253,8 @@ export default function ProductDetails() {
                   100% Genuine Healthcare Products
                 </div>
                 <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <Truck size={18} className="text-primary-600" />
-                  Fast & Secure Nationwide Delivery
+                  <Truck size={18} className="text-primary-600 shrink-0" />
+                  <span>Fast Delivery (Pay driver or rider directly upon delivery)</span>
                 </div>
               </div>
             </div>

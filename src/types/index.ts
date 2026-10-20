@@ -25,12 +25,29 @@ export interface Order {
   userId: string;
   customerName: string;
   customerEmail: string;
+  customerPhone?: string;
+  deliveryMethod?: string;
+  paymentStatus?: 'pending' | 'confirmed' | 'refunded';
+  paymentConfirmedAt?: string;
+  paymentReference?: string;
+  receiptUrl?: string;
   items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
   shippingAddress: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PaymentConfirmationRecord {
+  id: string;
+  orderId: string;
+  customerName: string;
+  customerPhone: string;
+  amount: number;
+  messageText: string;
+  confirmedBy?: string;
+  confirmedAt: string;
 }
 
 export interface Product {

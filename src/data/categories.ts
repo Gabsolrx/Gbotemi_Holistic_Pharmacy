@@ -21,6 +21,5 @@ export const CATEGORIES = [
   "Topical Products",
   "Eye Drops",
   "Injections",
-  "Medical Devices",
-  "Personal Care"
+  "Medical Devices"
 ];

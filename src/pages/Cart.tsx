@@ -118,20 +118,21 @@ export default function Cart() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24">
               <h3 className="text-lg font-bold text-gray-900 mb-6">Order Summary</h3>
               
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3.5 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotal ({getTotalItems()} items)</span>
                   <span className="font-medium text-gray-900">{formatCurrency(subtotal)}</span>
                 </div>
-
               </div>
               
               <div className="border-t border-gray-100 pt-4 mb-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-gray-900">Total</span>
+                  <div>
+                    <span className="text-lg font-bold text-gray-900 block leading-tight">Total</span>
+                    <span className="text-xs text-slate-500 font-medium">Drug Order Total</span>
+                  </div>
                   <span className="text-2xl font-bold text-primary-800">{formatCurrency(total)}</span>
                 </div>
-
               </div>
 
               <Button size="lg" className="w-full gap-2" onClick={() => navigate('/checkout')}>

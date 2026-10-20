@@ -93,6 +93,35 @@ CREATE TABLE cms_settings (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
+-- 6. Payment Confirmations Table (Admin confirmations sent to customers)
+CREATE TABLE IF NOT EXISTS payment_confirmations (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    order_id TEXT NOT NULL,
+    customer_name TEXT,
+    customer_phone TEXT,
+    amount DECIMAL(10, 2),
+    message_text TEXT NOT NULL,
+    channel TEXT DEFAULT 'whatsapp',
+    confirmed_by TEXT DEFAULT 'admin',
+    confirmed_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 7. Payment Receipts Table (Customer uploaded transfer receipts/PDFs)
+CREATE TABLE IF NOT EXISTS payment_receipts (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    order_id TEXT NOT NULL,
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    file_url TEXT NOT NULL,
+    file_name TEXT,
+    file_type TEXT,
+    customer_name TEXT,
+    customer_phone TEXT,
+    amount DECIMAL(10, 2),
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
 -- ====================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- ====================================================================
@@ -101,6 +130,8 @@ ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_confirmations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_receipts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cms_settings ENABLE ROW LEVEL SECURITY;
 

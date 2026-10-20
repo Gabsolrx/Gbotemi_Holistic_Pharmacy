@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Pill, Video, Stethoscope, HeartPulse, Activity, ArrowRight, ShieldCheck, Leaf } from 'lucide-react';
+import { Video, ArrowRight } from 'lucide-react';
 
 const services = [
   {
@@ -15,7 +15,6 @@ const services = [
     id: 'prescriptions',
     title: 'Prescription Management',
     description: 'Easily upload your prescriptions, track your refill schedules, and have your medications delivered directly to your door safely and securely.',
-    icon: <Pill size={32} />,
     color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
     link: '/prescription',
     linkText: 'Upload Prescription'
@@ -24,7 +23,6 @@ const services = [
     id: 'health-tools',
     title: 'Health & Wellness Tools',
     description: 'Access our suite of free health tools including a BMI calculator, blood pressure monitor interpretations, and medication refill reminders.',
-    icon: <Activity size={32} />,
     color: 'bg-rose-50 text-rose-600 border-rose-100',
     link: '/health-tools',
     linkText: 'Use Free Tools'
@@ -33,7 +31,6 @@ const services = [
     id: 'chronic-care',
     title: 'Chronic Disease Management',
     description: 'Specialized ongoing care programs for managing hypertension, diabetes, and other chronic conditions through medication and lifestyle adjustments. Message us on WhatsApp for more details.',
-    icon: <HeartPulse size={32} />,
     color: 'bg-red-50 text-red-600 border-red-100',
     link: 'https://wa.me/2348029660153?text=Hello%20Gbotemi%20Holistic%20Pharmacy,%20I%20would%20like%20to%20inquire%20about%20the%20Chronic%20Disease%20Management%20program.',
     linkText: 'Inquire Now'
@@ -42,7 +39,6 @@ const services = [
     id: 'holistic-counseling',
     title: 'Holistic & Nutritional Counseling',
     description: 'Discover natural supplements and dietary changes that complement your traditional medications for a well-rounded approach to healing.',
-    icon: <Leaf size={32} />,
     color: 'bg-green-50 text-green-600 border-green-100',
     link: '/consultation',
     linkText: 'Talk to an Expert'
@@ -51,7 +47,6 @@ const services = [
     id: 'special-order',
     title: 'Special Order & Quality Assurance',
     description: 'Can\'t find a specific medication? Let us source it for you through our trusted network, ensuring 100% authenticity and safety.',
-    icon: <ShieldCheck size={32} />,
     color: 'bg-amber-50 text-amber-600 border-amber-100',
     link: '/contact',
     linkText: 'Request an Item'
@@ -75,9 +70,11 @@ export default function Services() {
               key={service.id} 
               className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
-              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 border ${service.color}`}>
-                {service.icon}
-              </div>
+              {service.icon && (
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 border ${service.color}`}>
+                  {service.icon}
+                </div>
+              )}
               
               <h2 className="text-xl font-bold text-gray-900 mb-3">
                 {service.title}
@@ -113,9 +110,6 @@ export default function Services() {
         {/* Banner */}
         <div className="mt-20 bg-primary-900 rounded-3xl p-8 md:p-12 text-center text-white border border-primary-800 relative overflow-hidden">
           <div className="relative z-10">
-            <div className="w-16 h-16 bg-primary-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Stethoscope size={32} className="text-primary-200" />
-            </div>
             <h2 className="text-3xl font-bold mb-4">Not sure what you need?</h2>
             <p className="text-primary-100 max-w-xl mx-auto mb-8 text-lg">
               Our holistic pharmacists are standing by to listen to your needs and guide you to the right services or products.

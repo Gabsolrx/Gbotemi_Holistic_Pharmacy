@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Filter, SlidersHorizontal, Search, Loader2, PackageOpen } from 'lucide-react';
 import { ProductFilters } from '../components/shop/ProductFilters';
 import { ProductCard } from '../components/ui/ProductCard';
 import { useProducts } from '../hooks/useProducts';
+import { CATEGORIES } from '../data/categories';
 
 export default function Shop() {
   
@@ -20,6 +21,15 @@ export default function Shop() {
   const queryParam = searchParams.get('q');
 
   const { products: allProducts, isLoading } = useProducts();
+
+  useEffect(() => {
+    if (window.location.hash === '#categories') {
+      const el = document.getElementById('categories');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let result = [...allProducts];
@@ -74,7 +84,7 @@ export default function Shop() {
     }
 
     return result;
-  }, [allProducts, searchQuery, sortBy]);
+  }, [allProducts, searchQuery, queryParam, sortBy, categoryFilter, minPrice, maxPrice, inStock, otc]);
 
   return (
     <div className="bg-slate-50 min-h-screen py-8">
@@ -125,6 +135,74 @@ export default function Shop() {
               </select>
             </div>
             
+          </div>
+        </div>
+
+        {/* Categories Section in Shop */}
+        <div id="categories" className="mb-8 bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm scroll-mt-24">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Shop by Category</h2>
+              <p className="text-xs sm:text-sm text-gray-500">
+                {categoryFilter ? (
+                  <span>Filtering by: <span className="font-semibold text-primary-700">{categoryFilter}</span></span>
+                ) : (
+                  'Browse all medicine & healthcare categories'
+                )}
+              </p>
+            </div>
+            {categoryFilter && (
+              <button
+                onClick={() => {
+                  searchParams.delete('category');
+                  setSearchParams(searchParams);
+                }}
+                className="self-start sm:self-auto text-xs font-semibold text-primary-700 hover:text-primary-800 bg-primary-50 px-3 py-1.5 rounded-lg hover:bg-primary-100 transition-colors"
+              >
+                Clear Category Filter
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2 sm:gap-2.5">
+            <button
+              onClick={() => {
+                if (categoryFilter) {
+                  searchParams.delete('category');
+                  setSearchParams(searchParams);
+                }
+              }}
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                !categoryFilter
+                  ? 'bg-primary-700 text-white shadow-sm shadow-primary-700/20 font-semibold'
+                  : 'bg-slate-50 text-gray-700 hover:bg-slate-100 border border-gray-100'
+              }`}
+            >
+              All Categories
+            </button>
+            {CATEGORIES.map((cat) => {
+              const isActive = categoryFilter?.toLowerCase().trim() === cat.toLowerCase().trim();
+              return (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    if (isActive) {
+                      searchParams.delete('category');
+                    } else {
+                      searchParams.set('category', cat);
+                    }
+                    setSearchParams(searchParams);
+                  }}
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                    isActive
+                      ? 'bg-primary-700 text-white shadow-sm shadow-primary-700/20 font-semibold'
+                      : 'bg-slate-50 text-gray-700 hover:bg-slate-100 border border-gray-100 hover:border-gray-200'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         </div>
 

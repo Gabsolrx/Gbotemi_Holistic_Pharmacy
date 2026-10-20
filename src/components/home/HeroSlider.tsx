@@ -57,7 +57,7 @@ export function HeroSlider() {
 
           {/* Content */}
           <div className="absolute inset-0 flex items-center">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
               <div className="max-w-2xl transform transition-all duration-700 translate-y-0 opacity-100">
                 <h1 
                   className={cn("mb-6 leading-tight font-bold", slide.styles?.titleSize || "text-3xl sm:text-4xl md:text-5xl lg:text-6xl", slide.styles?.titleFont || "font-sans")}

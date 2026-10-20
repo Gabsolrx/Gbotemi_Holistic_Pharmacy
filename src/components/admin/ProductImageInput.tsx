@@ -106,7 +106,7 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
   const sampleImages = [
     { label: 'Syrup / Liquid', url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80' },
     { label: 'Tablets / Blister', url: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=600&auto=format&fit=crop&q=80' },
-    { label: 'Vitamins Bottle', url: 'https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=600&auto=format&fit=crop&q=80' },
+    { label: 'Vitamins Bottle', url: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=600&auto=format&fit=crop&q=80' },
     { label: 'First Aid / Device', url: 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600&auto=format&fit=crop&q=80' },
   ];
 

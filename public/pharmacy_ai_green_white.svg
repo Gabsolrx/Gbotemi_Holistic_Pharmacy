@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Vibrant Emerald Green Badge Gradient -->
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="45%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Subtle inner shadow for 3D depth -->
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#022c22" flood-opacity="0.3" />
+    </filter>
+
+    <!-- Drop shadow for the white chat bubble -->
+    <filter id="bubbleDrop" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#022c22" flood-opacity="0.22" />
+    </filter>
+  </defs>
+
+  <!-- Green Circular Badge -->
+  <circle cx="256" cy="256" r="240" fill="url(#badgeGrad)" />
+
+  <!-- Clean inner accent ring -->
+  <circle cx="256" cy="256" r="238" fill="none" stroke="#A7F3D0" stroke-width="2.5" stroke-opacity="0.45" />
+
+  <!-- White Speech Bubble (AI Healthcare Chat) -->
+  <g filter="url(#bubbleDrop)">
+    <!-- Speech bubble body and downward pointer -->
+    <path 
+      d="M 155 130
+         C 205 130, 307 130, 357 130
+         C 410 130, 436 160, 436 215
+         C 436 270, 410 300, 357 300
+         C 310 300, 240 300, 215 300
+         L 162 352
+         C 152 362, 136 355, 140 342
+         L 149 300
+         C 102 300, 76 270, 76 215
+         C 76 160, 102 130, 155 130 Z" 
+      fill="#FFFFFF" 
+    />
+  </g>
+
+  <!-- Centered Pharmacy Cross inside White Bubble (in matching emerald green) -->
+  <g fill="#059669">
+    <!-- Vertical arm -->
+    <rect x="236" y="160" width="40" height="110" rx="9" ry="9" />
+    <!-- Horizontal arm -->
+    <rect x="201" y="195" width="110" height="40" rx="9" ry="9" />
+  </g>
+</svg>

@@ -85,12 +85,12 @@ const defaultConfig: CmsConfig = {
   faq: [],
   featuredProductOrder: [],
   storeSettings: {
-    announcementBar: 'Free delivery on orders above ₦10,000!',
+    announcementBar: 'Direct Bank Transfer to Moniepoint MFB • Delivery across Osun State & Interstate • Pay driver or rider directly upon delivery',
     announcementEnabled: true,
     supportEmail: 'gbotemihpharmacy@gmail.com',
-    supportPhone: '+234 800 000 0000',
-    deliveryFeeStandard: 1500,
-    deliveryFeeExpress: 3000
+    supportPhone: '+234 802 966 0153',
+    deliveryFeeStandard: 0,
+    deliveryFeeExpress: 0
   }
 };
 
