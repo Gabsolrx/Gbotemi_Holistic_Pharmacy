@@ -6,19 +6,38 @@ import { cmsService, HeroSlide } from '../../services/cmsService';
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  // Instant synchronous initialization from memory/cache - 0ms delay
+  const [slides, setSlides] = useState<HeroSlide[]>(() => cmsService.getInitialConfig().heroSlides);
 
   useEffect(() => {
+    let isMounted = true;
     const loadConfig = async () => {
       const config = await cmsService.getConfig();
-      setSlides(config.heroSlides);
+      if (isMounted && config?.heroSlides?.length > 0) {
+        setSlides(config.heroSlides);
+      }
     };
     loadConfig();
 
     const handleUpdate = () => loadConfig();
     window.addEventListener('cms-updated', handleUpdate);
-    return () => window.removeEventListener('cms-updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('cms-updated', handleUpdate);
+    };
   }, []);
+
+  // Preload subsequent slide images in background so slide transitions are instant
+  useEffect(() => {
+    if (slides.length > 1) {
+      slides.slice(1).forEach((slide) => {
+        if (slide.image) {
+          const img = new Image();
+          img.src = slide.image;
+        }
+      });
+    }
+  }, [slides]);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -35,7 +54,7 @@ export function HeroSlider() {
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] bg-gray-900 overflow-hidden group">
+    <div className="relative w-full h-[500px] md:h-[600px] bg-slate-900 overflow-hidden group">
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
@@ -46,11 +65,14 @@ export function HeroSlider() {
           )}
         >
           {/* Background Image with Overlay */}
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-slate-900">
             <img 
               src={slide.image} 
               alt={slide.title}
               className="w-full h-full object-cover object-center"
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              decoding={index === 0 ? "sync" : "async"}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
           </div>

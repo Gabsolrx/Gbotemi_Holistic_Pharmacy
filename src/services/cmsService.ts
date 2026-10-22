@@ -35,18 +35,18 @@ export interface CmsConfig {
 const defaultHeroSlides: HeroSlide[] = [
   {
     id: 1,
-    title: 'Genuine Medicines & Healthcare',
+    title: 'Your Trusted Partner for Genuine Medicines',
     description: 'Order quality healthcare products and medicines conveniently from a trusted pharmacy with fast delivery.',
-    image: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=1600&h=600',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874735397_u5n2ac.jpeg',
     primaryCta: { text: 'Shop Healthcare Products', link: '/shop' },
-    secondaryCta: { text: '', link: '' },
+    secondaryCta: { text: 'Talk to a Pharmacist', link: '/consultation' },
     styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
   },
   {
     id: 2,
     title: 'Health, Wellness & Vitality',
     description: 'Explore our premium range of vitamins, supplements, and natural wellness products for a healthier you.',
-    image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=1600&h=600',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874741258_xk8q7o.jpeg',
     primaryCta: { text: 'Explore Wellness', link: '/shop' },
     secondaryCta: { text: 'Shop Now', link: '/shop' },
     styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
@@ -55,7 +55,7 @@ const defaultHeroSlides: HeroSlide[] = [
     id: 3,
     title: 'Expert Pharmacist Consultation',
     description: 'Get professional health guidance and compassionate care from our qualified pharmacists from the comfort of your home.',
-    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=1600&h=600',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874743059_qpxpao.jpeg',
     primaryCta: { text: 'Consult a Pharmacist', link: '/consultation' },
     secondaryCta: { text: 'Learn More', link: '/about' },
     styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
@@ -64,7 +64,7 @@ const defaultHeroSlides: HeroSlide[] = [
     id: 4,
     title: 'Seamless Prescription Assistance',
     description: 'Securely upload your prescriptions and let our expert team handle the rest with care and confidentiality.',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1600&h=600',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874744209_rh4iuq.jpeg',
     primaryCta: { text: 'Upload Prescription', link: '/prescription' },
     secondaryCta: { text: 'Contact Us', link: '/contact' },
     styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
@@ -73,7 +73,7 @@ const defaultHeroSlides: HeroSlide[] = [
     id: 5,
     title: 'Family Health & Everyday Care',
     description: 'Discover our comprehensive range of everyday care products designed to keep your family happy and healthy.',
-    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=1600&h=600',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874749093_9j0v1h.jpeg',
     primaryCta: { text: 'Shop Family Care', link: '/shop' },
     secondaryCta: { text: 'Explore Products', link: '/shop' },
     styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
@@ -85,37 +85,33 @@ const defaultConfig: CmsConfig = {
   faq: [],
   featuredProductOrder: [],
   storeSettings: {
-    announcementBar: 'Direct Bank Transfer to Moniepoint MFB • Delivery across Osun State & Interstate • Pay driver or rider directly upon delivery',
+    announcementBar: 'Free delivery on orders above ₦10,000!',
     announcementEnabled: true,
     supportEmail: 'gbotemihpharmacy@gmail.com',
     supportPhone: '+234 802 966 0153',
-    deliveryFeeStandard: 0,
-    deliveryFeeExpress: 0
+    deliveryFeeStandard: 1500,
+    deliveryFeeExpress: 3000
   }
 };
 
 export const cmsService = {
-    getConfig: async (): Promise<CmsConfig> => {
-    let localConfig = defaultConfig;
+  getInitialConfig: (): CmsConfig => {
     try {
-      const stored = localStorage.getItem(CMS_STORAGE_KEY);
-      if (stored) {
-         let text = stored;
-         text = text.replace(/\/upload-prescription/g, '/prescription');
-         localStorage.setItem(CMS_STORAGE_KEY, text);
-      }
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.heroSlides && parsed.heroSlides.length < defaultHeroSlides.length) {
-          const mergedSlides = [...defaultHeroSlides];
-          parsed.heroSlides.forEach((slide: any, index: number) => {
-            mergedSlides[index] = slide;
-          });
-          parsed.heroSlides = mergedSlides;
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const stored = localStorage.getItem(CMS_STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.heroSlides && parsed.heroSlides.length > 0) {
+            return { ...defaultConfig, ...parsed };
+          }
         }
-        localConfig = { ...defaultConfig, ...parsed };
       }
     } catch (e) {}
+    return defaultConfig;
+  },
+
+  getConfig: async (): Promise<CmsConfig> => {
+    let localConfig = cmsService.getInitialConfig();
 
     try {
       const { data, error } = await supabase.from('cms_settings').select('value').eq('key', 'app_config').maybeSingle();
@@ -126,18 +122,23 @@ export const cmsService = {
           configStr = configStr.replace(/\/upload-prescription/g, '/prescription');
           data.value = JSON.parse(configStr);
         }
-         let parsedVal = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-         const remoteConfig = {
-           heroSlides: parsedVal.heroSlides || localConfig.heroSlides,
-           faq: parsedVal.faq || localConfig.faq,
-           featuredProductOrder: parsedVal.featuredProductOrder || localConfig.featuredProductOrder,
-           storeSettings: parsedVal.storeSettings || localConfig.storeSettings
-         };
-         
-         setTimeout(() => cmsService.syncConfig(localConfig, remoteConfig), 1000);
-         return remoteConfig;
+        let parsedVal = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+        const remoteConfig = {
+          heroSlides: parsedVal.heroSlides || localConfig.heroSlides,
+          faq: parsedVal.faq || localConfig.faq,
+          featuredProductOrder: parsedVal.featuredProductOrder || localConfig.featuredProductOrder,
+          storeSettings: parsedVal.storeSettings || localConfig.storeSettings
+        };
+        
+        // Cache immediately to localStorage for future instant loads
+        try {
+          localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(remoteConfig));
+        } catch (e) {}
+
+        setTimeout(() => cmsService.syncConfig(localConfig, remoteConfig), 1000);
+        return remoteConfig;
       } else {
-         setTimeout(() => cmsService.syncConfig(localConfig, null), 1000);
+        setTimeout(() => cmsService.syncConfig(localConfig, null), 1000);
       }
     } catch(err) {}
 
