@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Users, Search, ShieldCheck } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Badge } from '../../components/ui/Badge';
 import toast from 'react-hot-toast';
@@ -49,7 +48,6 @@ export default function AdminCustomers() {
         
         let loadedCustomers = data || [];
         
-        // Add mock customers if list is empty (for testing)
         if (loadedCustomers.length === 0) {
           loadedCustomers = mockCustomers;
         }
@@ -66,7 +64,7 @@ export default function AdminCustomers() {
   }, []);
 
   const filteredCustomers = customers
-    .filter(c => c.role !== 'super_admin') // Exclude super_admin
+    .filter(c => c.role !== 'super_admin')
     .filter(c => 
       `${c.first_name} ${c.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.phone?.includes(searchTerm) ||
@@ -74,7 +72,7 @@ export default function AdminCustomers() {
     );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Customer Directory</h1>
@@ -85,13 +83,12 @@ export default function AdminCustomers() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-slate-200 bg-slate-50/50">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
               type="text" 
               placeholder="Search by name, phone, or role..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white shadow-sm"
+              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white shadow-sm"
             />
           </div>
         </div>
@@ -116,7 +113,6 @@ export default function AdminCustomers() {
               ) : filteredCustomers.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
-                    <Users className="mx-auto text-slate-300 mb-2" size={32} />
                     <p className="font-medium text-slate-700">No customers found.</p>
                   </td>
                 </tr>

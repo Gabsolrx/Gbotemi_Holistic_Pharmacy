@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { ProductImageInput } from './ProductImageInput';
@@ -170,10 +169,10 @@ export function ProductFormModal({ isOpen, onClose, product, onSuccess }: Produc
           <button 
             type="button"
             onClick={onClose} 
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors flex-shrink-0 ml-2"
+            className="px-2.5 py-1 text-sm font-bold text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors flex-shrink-0 ml-2"
             aria-label="Close dialog"
           >
-            <X size={20} />
+            ✕
           </button>
         </div>
         

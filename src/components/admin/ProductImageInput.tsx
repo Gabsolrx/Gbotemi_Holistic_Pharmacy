@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Link as LinkIcon, Image as ImageIcon, X, Check, Loader2, RefreshCw, AlertCircle, Sparkles } from 'lucide-react';
 import { uploadProductImage } from '../../utils/imageUpload';
 import toast from 'react-hot-toast';
 
@@ -18,12 +17,10 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync internal state if external value changes
   useEffect(() => {
     setUrlInput(value || '');
     setImageError(false);
     if (value && value.startsWith('http') && !value.includes('supabase') && activeTab === 'upload' && !uploadDetails) {
-      // If initialized with an external URL, default to url tab
       setActiveTab('url');
     }
   }, [value]);
@@ -34,7 +31,6 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
       return;
     }
 
-    // Limit raw file to reasonable size (e.g., 20MB max before compression)
     if (file.size > 20 * 1024 * 1024) {
       toast.error('Image is too large. Please select an image under 20MB.');
       return;
@@ -102,7 +98,6 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
     }
   };
 
-  // Quick preset pharmacy icons / samples for testing
   const sampleImages = [
     { label: 'Syrup / Liquid', url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80' },
     { label: 'Tablets / Blister', url: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=600&auto=format&fit=crop&q=80' },
@@ -111,7 +106,7 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-sans">
       <div className="flex items-center justify-between">
         <label className="block text-sm font-semibold text-slate-800">
           Product Image
@@ -121,36 +116,34 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
         </span>
       </div>
 
-      {/* Tab Switcher */}
+      {/* Tab Switcher (No Icons) */}
       <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200">
         <button
           type="button"
           onClick={() => setActiveTab('upload')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all ${
+          className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all ${
             activeTab === 'upload'
               ? 'bg-white text-slate-900 shadow-sm font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <Upload size={16} className={activeTab === 'upload' ? 'text-primary-600' : ''} />
           Upload from Device / Gallery
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('url')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all ${
+          className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all ${
             activeTab === 'url'
               ? 'bg-white text-slate-900 shadow-sm font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <LinkIcon size={16} className={activeTab === 'url' ? 'text-primary-600' : ''} />
           Paste Image Web Link
         </button>
       </div>
 
-      {/* Tab 1: Upload from Gallery / Device */}
+      {/* Tab 1: Upload from Gallery / Device (No Icons) */}
       {activeTab === 'upload' && (
         <div className="space-y-3">
           <input
@@ -177,47 +170,38 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
             }`}
           >
             {isProcessing ? (
-              <div className="flex flex-col items-center justify-center py-4 space-y-3">
-                <Loader2 size={36} className="text-primary-600 animate-spin" />
-                <p className="text-sm font-medium text-slate-700">Optimizing & uploading image...</p>
+              <div className="flex flex-col items-center justify-center py-4 space-y-2">
+                <p className="text-sm font-semibold text-primary-700">Optimizing & uploading image...</p>
                 <p className="text-xs text-slate-400">Processing file for best display speed</p>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-primary-600">
-                  <Upload size={24} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-800">
-                    Click or tap to choose from Gallery / Camera
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Drag and drop file here, or tap to open Phone Gallery or Camera
-                  </p>
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-medium text-slate-600">
-                  <span>JPEG, PNG, WebP, GIF (Auto-optimized)</span>
-                </div>
+              <div className="flex flex-col items-center justify-center space-y-2">
+                <p className="text-sm font-semibold text-slate-800">
+                  Click or tap to choose from Gallery or Camera
+                </p>
+                <p className="text-xs text-slate-500">
+                  Drag and drop file here, or tap to browse your phone/laptop files
+                </p>
+                <span className="text-[11px] text-slate-400 font-medium">
+                  JPEG, PNG, WebP, GIF (Auto-optimized)
+                </span>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Tab 2: URL Link */}
+      {/* Tab 2: URL Link (No Icons) */}
       {activeTab === 'url' && (
         <div className="space-y-3">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                <LinkIcon size={16} />
-              </div>
               <input
                 type="url"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 placeholder="https://example.com/product-image.jpg"
-                className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -232,9 +216,9 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
                     setUrlInput('');
                     onChange('');
                   }}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs font-bold text-slate-400 hover:text-slate-600"
                 >
-                  <X size={16} />
+                  ✕
                 </button>
               )}
             </div>
@@ -250,10 +234,7 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
 
           {/* Quick Samples */}
           <div className="pt-2">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2">
-              <Sparkles size={13} className="text-amber-500" />
-              <span>Or choose a sample placeholder:</span>
-            </div>
+            <p className="text-xs text-slate-500 mb-2">Or choose a sample placeholder:</p>
             <div className="flex flex-wrap gap-2">
               {sampleImages.map((s, idx) => (
                 <button
@@ -264,7 +245,7 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
                     onChange(s.url);
                     setImageError(false);
                   }}
-                  className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg transition-colors"
+                  className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg transition-colors font-medium"
                 >
                   {s.label}
                 </button>
@@ -274,16 +255,13 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
         </div>
       )}
 
-      {/* Active Image Preview Card */}
+      {/* Active Image Preview Card (No Icons) */}
       {value ? (
         <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 overflow-hidden flex-shrink-0 relative flex items-center justify-center shadow-sm">
               {imageError ? (
-                <div className="flex flex-col items-center justify-center p-1 text-center text-red-500">
-                  <AlertCircle size={20} />
-                  <span className="text-[9px] mt-0.5 leading-tight">Broken</span>
-                </div>
+                <span className="text-[10px] text-red-500 font-bold p-1 text-center">Failed preview</span>
               ) : (
                 <img
                   src={value}
@@ -296,16 +274,9 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
             </div>
 
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
-                  <Check size={12} /> Image Ready
-                </span>
-                {value.startsWith('data:') && (
-                  <span className="text-[10px] text-slate-500 bg-slate-200/80 px-1.5 py-0.5 rounded">
-                    Direct Device File
-                  </span>
-                )}
-              </div>
+              <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md inline-block">
+                Image Ready
+              </span>
               <p className="text-xs text-slate-600 truncate mt-1 max-w-[200px] sm:max-w-xs font-mono">
                 {uploadDetails?.fileName || (value.startsWith('data:') ? 'Image uploaded from gallery' : value)}
               </p>
@@ -322,18 +293,18 @@ export function ProductImageInput({ value, onChange }: ProductImageInputProps) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-1"
+                className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 rounded-lg transition-colors"
               >
-                <RefreshCw size={12} /> Replace
+                Replace
               </button>
             ) : null}
             <button
               type="button"
               onClick={handleClear}
-              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="px-2.5 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
               title="Remove image"
             >
-              <X size={18} />
+              Remove
             </button>
           </div>
         </div>

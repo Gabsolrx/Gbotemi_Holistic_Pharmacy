@@ -1,11 +1,14 @@
 import { supabase } from '../lib/supabase';
 import { uploadBase64Image } from '../utils/imageUpload';
 
-const CMS_STORAGE_KEY = 'gbotemi-cms-config-v1';
+const CMS_STORAGE_KEY = 'gbotemi-cms-config-v2';
 
 export interface HeroSlide {
   id: number | string;
+  label?: string;
   title: string;
+  headlineFirst?: string;
+  headlineSecond?: string;
   description: string;
   image: string;
   primaryCta: { text: string; link: string };
@@ -24,73 +27,74 @@ export interface CmsConfig {
   featuredProductOrder?: string[];
   storeSettings: {
     announcementBar: string;
+    announcements?: string[];
     announcementEnabled: boolean;
     supportEmail: string;
     supportPhone: string;
-    deliveryFeeStandard?: number;
-    deliveryFeeExpress?: number;
   };
 }
 
-const defaultHeroSlides: HeroSlide[] = [
+const stripDot = (text?: string): string => {
+  if (!text) return '';
+  return text.replace(/\.+$/, '').trim();
+};
+
+export const defaultHeroSlides: HeroSlide[] = [
   {
     id: 1,
-    title: 'Your Trusted Partner for Genuine Medicines',
-    description: 'Order quality healthcare products and medicines conveniently from a trusted pharmacy with fast delivery.',
+    label: 'WELCOME TO GBOTEMI',
+    title: 'Your health\nOur priority',
+    headlineFirst: 'Your health',
+    headlineSecond: 'Our priority',
+    description: 'Everyday healthcare, with care you deserve.',
     image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874735397_u5n2ac.jpeg',
-    primaryCta: { text: 'Shop Healthcare Products', link: '/shop' },
-    secondaryCta: { text: 'Talk to a Pharmacist', link: '/consultation' },
-    styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
+    primaryCta: { text: 'Explore Pharmacy →', link: '/shop' },
+    secondaryCta: { text: 'Shop Wellness', link: '/shop?category=Wellness' },
+    styles: { titleColor: '#17231E', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#65776D' }
   },
   {
     id: 2,
-    title: 'Health, Wellness & Vitality',
-    description: 'Explore our premium range of vitamins, supplements, and natural wellness products for a healthier you.',
-    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874741258_xk8q7o.jpeg',
-    primaryCta: { text: 'Explore Wellness', link: '/shop' },
-    secondaryCta: { text: 'Shop Now', link: '/shop' },
-    styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
+    label: 'PRESCRIPTION MADE SIMPLE',
+    title: 'Skip the hassle\nStart online',
+    headlineFirst: 'Skip the hassle',
+    headlineSecond: 'Start online',
+    description: 'Send your prescription from anywhere.',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874744209_rh4iuq.jpeg',
+    primaryCta: { text: 'Get Started →', link: '/prescription' },
+    secondaryCta: { text: 'How It Works', link: '/prescription' },
+    styles: { titleColor: '#17231E', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#65776D' }
   },
   {
     id: 3,
-    title: 'Expert Pharmacist Consultation',
-    description: 'Get professional health guidance and compassionate care from our qualified pharmacists from the comfort of your home.',
+    label: 'CARE BEYOND MEDICINES',
+    title: 'Your wellness\nOur priority',
+    headlineFirst: 'Your wellness',
+    headlineSecond: 'Our priority',
+    description: 'Discover wellness essentials and trusted guidance.',
     image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874743059_qpxpao.jpeg',
-    primaryCta: { text: 'Consult a Pharmacist', link: '/consultation' },
-    secondaryCta: { text: 'Learn More', link: '/about' },
-    styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
-  },
-  {
-    id: 4,
-    title: 'Seamless Prescription Assistance',
-    description: 'Securely upload your prescriptions and let our expert team handle the rest with care and confidentiality.',
-    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874744209_rh4iuq.jpeg',
-    primaryCta: { text: 'Upload Prescription', link: '/prescription' },
-    secondaryCta: { text: 'Contact Us', link: '/contact' },
-    styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
-  },
-  {
-    id: 5,
-    title: 'Family Health & Everyday Care',
-    description: 'Discover our comprehensive range of everyday care products designed to keep your family happy and healthy.',
-    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874749093_9j0v1h.jpeg',
-    primaryCta: { text: 'Shop Family Care', link: '/shop' },
-    secondaryCta: { text: 'Explore Products', link: '/shop' },
-    styles: { titleColor: '#ffffff', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#e2e8f0' }
+    primaryCta: { text: 'Explore Wellness →', link: '/shop?category=Wellness' },
+    secondaryCta: { text: 'Talk to a Pharmacist', link: '/consultation' },
+    styles: { titleColor: '#17231E', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#65776D' }
   }
 ];
 
-const defaultConfig: CmsConfig = {
+export const defaultAnnouncements: string[] = [
+  'Free delivery on orders above ₦10,000! • Gbotemi Holistic Pharmacy',
+  'Upload your prescription online for rapid verification & doorstep dispatch • Gbotemi Care',
+  'Need medication advice? Speak directly with our licensed pharmacist • Gbotemi Holistic',
+  '100% Genuine, NAFDAC-certified medications & wellness essentials • Gbotemi Pharmacy',
+];
+
+export const defaultConfig: CmsConfig = {
   heroSlides: defaultHeroSlides,
   faq: [],
   featuredProductOrder: [],
   storeSettings: {
-    announcementBar: 'Free delivery on orders above ₦10,000!',
+    announcementBar: defaultAnnouncements[0],
+    announcements: defaultAnnouncements,
     announcementEnabled: true,
     supportEmail: 'gbotemihpharmacy@gmail.com',
-    supportPhone: '+234 802 966 0153',
-    deliveryFeeStandard: 1500,
-    deliveryFeeExpress: 3000
+    supportPhone: '+234 802 966 0153'
   }
 };
 
@@ -101,7 +105,14 @@ export const cmsService = {
         const stored = localStorage.getItem(CMS_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed.heroSlides && parsed.heroSlides.length > 0) {
+          if (parsed.heroSlides && parsed.heroSlides.length === 3 && parsed.heroSlides[0].label) {
+            // Normalize headlines without dots
+            parsed.heroSlides = parsed.heroSlides.map((s: HeroSlide) => ({
+              ...s,
+              title: s.title ? s.title.split('\n').map(stripDot).join('\n') : s.title,
+              headlineFirst: stripDot(s.headlineFirst),
+              headlineSecond: stripDot(s.headlineSecond),
+            }));
             return { ...defaultConfig, ...parsed };
           }
         }
@@ -116,36 +127,51 @@ export const cmsService = {
     try {
       const { data, error } = await supabase.from('cms_settings').select('value').eq('key', 'app_config').maybeSingle();
       if (!error && data && data.value) {
-        // Hot-fix legacy links dynamically
-        let configStr = JSON.stringify(data.value);
-        if (configStr.includes('/upload-prescription')) {
-          configStr = configStr.replace(/\/upload-prescription/g, '/prescription');
-          data.value = JSON.parse(configStr);
-        }
         let parsedVal = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-        const remoteConfig = {
-          heroSlides: parsedVal.heroSlides || localConfig.heroSlides,
+        
+        let remoteSlides = parsedVal.heroSlides;
+        if (!remoteSlides || remoteSlides.length !== 3 || !remoteSlides[0].label) {
+          remoteSlides = defaultHeroSlides;
+        } else {
+          // Normalize away any trailing periods from remote headlines
+          remoteSlides = remoteSlides.map((s: HeroSlide) => ({
+            ...s,
+            title: s.title ? s.title.split('\n').map(stripDot).join('\n') : s.title,
+            headlineFirst: stripDot(s.headlineFirst),
+            headlineSecond: stripDot(s.headlineSecond),
+          }));
+        }
+
+        const remoteConfig: CmsConfig = {
+          heroSlides: remoteSlides,
           faq: parsedVal.faq || localConfig.faq,
           featuredProductOrder: parsedVal.featuredProductOrder || localConfig.featuredProductOrder,
-          storeSettings: parsedVal.storeSettings || localConfig.storeSettings
+          storeSettings: {
+            announcementBar: parsedVal.storeSettings?.announcementBar || localConfig.storeSettings.announcementBar,
+            announcements: parsedVal.storeSettings?.announcements || defaultAnnouncements,
+            announcementEnabled: parsedVal.storeSettings?.announcementEnabled ?? localConfig.storeSettings.announcementEnabled,
+            supportEmail: parsedVal.storeSettings?.supportEmail || localConfig.storeSettings.supportEmail,
+            supportPhone: parsedVal.storeSettings?.supportPhone || localConfig.storeSettings.supportPhone
+          }
         };
         
-        // Cache immediately to localStorage for future instant loads
         try {
           localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(remoteConfig));
         } catch (e) {}
 
-        setTimeout(() => cmsService.syncConfig(localConfig, remoteConfig), 1000);
+        // Keep remote synchronized with clean normalized headlines
+        cmsService.saveConfig(remoteConfig).catch(() => {});
+
         return remoteConfig;
       } else {
-        setTimeout(() => cmsService.syncConfig(localConfig, null), 1000);
+        cmsService.saveConfig(defaultConfig).catch(() => {});
       }
     } catch(err) {}
 
     return localConfig;
   },
 
-    syncConfig: async (localConfig: CmsConfig, remoteConfig: CmsConfig | null) => {
+  syncConfig: async (localConfig: CmsConfig, remoteConfig: CmsConfig | null) => {
     try {
       let needsUpdate = false;
       const configToSync = remoteConfig ? { ...remoteConfig } : { ...localConfig };
@@ -178,7 +204,7 @@ export const cmsService = {
     }
   },
 
-    saveConfig: async (newConfig: CmsConfig): Promise<void> => {
+  saveConfig: async (newConfig: CmsConfig): Promise<void> => {
     try {
       for (let i = 0; i < newConfig.heroSlides.length; i++) {
         const slide = newConfig.heroSlides[i];

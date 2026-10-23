@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Trash2, X, Loader2, Package } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { productService } from '../../services/productService';
 import { formatCurrency } from '../../utils/format';
@@ -52,7 +51,7 @@ export function DeleteProductModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
       <div 
         className="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
@@ -61,19 +60,17 @@ export function DeleteProductModal({
         <button 
           onClick={onClose}
           disabled={isDeleting}
-          className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50"
+          className="absolute top-5 right-5 px-2.5 py-1 text-sm font-bold rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50"
         >
-          <X size={20} />
+          ✕
         </button>
 
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
-            <AlertTriangle size={24} />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">Delete Product</h3>
-            <p className="text-sm text-slate-500">This action cannot be undone.</p>
-          </div>
+        <div className="mb-4">
+          <span className="text-xs font-bold uppercase tracking-wider text-red-700 bg-red-50 px-2.5 py-1 rounded-md inline-block mb-1">
+            Warning
+          </span>
+          <h3 className="text-xl font-bold text-slate-900">Delete Product</h3>
+          <p className="text-sm text-slate-500">This action cannot be undone.</p>
         </div>
 
         {/* Product Preview Info */}
@@ -90,7 +87,7 @@ export function DeleteProductModal({
                 }}
               />
             ) : (
-              <Package className="w-6 h-6 text-slate-400" />
+              <span className="text-[10px] text-slate-400 font-bold">MED</span>
             )}
           </div>
           <div className="min-w-0 flex-1">
@@ -119,9 +116,9 @@ export function DeleteProductModal({
               type="button" 
               onClick={handleDelete}
               isLoading={isDeleting}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white gap-2"
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
             >
-              <Trash2 size={16} /> Delete Permanently
+              Delete Permanently
             </Button>
           </div>
 

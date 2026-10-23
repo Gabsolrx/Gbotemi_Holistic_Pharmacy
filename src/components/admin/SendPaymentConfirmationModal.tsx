@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle, MessageSquare, Copy, Check, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { formatCurrency } from '../../utils/format';
 import { Order } from '../../types';
@@ -28,7 +27,6 @@ export function SendPaymentConfirmationModal({
   const [copied, setCopied] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Initialize or reset prefilled message when order opens
   useEffect(() => {
     const rawPhone = order.customerPhone || '';
     setCustomerPhone(rawPhone);
@@ -42,9 +40,15 @@ export function SendPaymentConfirmationModal({
   }, [order]);
 
   const cleanPhone = (phone: string): string => {
-    let cleaned = phone.replace(/[\s+-]/g, '');
+    let cleaned = phone.replace(/[\s+\-()]/g, '');
     if (cleaned.startsWith('0')) {
       cleaned = '234' + cleaned.substring(1);
+    } else if (!cleaned.startsWith('234')) {
+      if (cleaned.length === 10) {
+        cleaned = '234' + cleaned;
+      } else if (cleaned.length === 11 && cleaned.startsWith('0')) {
+        cleaned = '234' + cleaned.substring(1);
+      }
     }
     return cleaned;
   };
@@ -52,7 +56,6 @@ export function SendPaymentConfirmationModal({
   const recordConfirmation = async (phone: string, text: string) => {
     const timestamp = new Date().toISOString();
 
-    // 1. Update orders table in Supabase
     try {
       await supabase
         .from('orders')
@@ -67,7 +70,6 @@ export function SendPaymentConfirmationModal({
       console.warn('Could not update order status in Supabase:', e);
     }
 
-    // 2. Insert into payment_confirmations table (or local storage fallback)
     try {
       await supabase
         .from('payment_confirmations')
@@ -83,7 +85,6 @@ export function SendPaymentConfirmationModal({
       console.warn('Could not insert to payment_confirmations table:', e);
     }
 
-    // 3. Fallback cache in localStorage
     try {
       const stored = JSON.parse(localStorage.getItem('gbotemi_payment_confirmations') || '[]');
       stored.unshift({
@@ -113,26 +114,29 @@ export function SendPaymentConfirmationModal({
       return;
     }
 
-    setIsUpdating(true);
     const formattedPhone = cleanPhone(customerPhone);
     const encodedText = encodeURIComponent(message);
     const waUrl = `https://wa.me/${formattedPhone}?text=${encodedText}`;
 
-    await recordConfirmation(customerPhone, message);
-
-    // Open WhatsApp in new tab
-    const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-    if (!win) {
-      const link = document.createElement('a');
-      link.href = waUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    // Open synchronously in user gesture context to prevent popup blocker
+    try {
+      const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+      if (!win) {
+        const link = document.createElement('a');
+        link.href = waUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch {
+      window.location.href = waUrl;
     }
 
-    toast.success('Payment confirmed! Opening WhatsApp with prefilled message...');
+    setIsUpdating(true);
+    await recordConfirmation(customerPhone, message);
+    toast.success('Payment confirmed and WhatsApp opened!');
     setIsUpdating(false);
     onClose();
   };
@@ -157,31 +161,29 @@ export function SendPaymentConfirmationModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 font-sans">
       <div 
         className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-xl flex flex-col max-h-[92vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
       >
         {/* Header */}
         <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white flex-shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
-              <ShieldCheck size={20} />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 leading-tight">
-                Send Payment Confirmation
-              </h2>
-              <p className="text-xs text-slate-500">
-                Order #{order.id} • {order.customerName}
-              </p>
-            </div>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-1">
+              Payment Dispatch
+            </span>
+            <h2 className="text-lg font-bold text-slate-900 leading-tight">
+              Send Payment Confirmation
+            </h2>
+            <p className="text-xs text-slate-500">
+              Order #{order.id} • {order.customerName}
+            </p>
           </div>
           <button 
             onClick={onClose} 
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+            className="px-2.5 py-1 text-sm font-bold text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
           >
-            <X size={20} />
+            ✕
           </button>
         </div>
 
@@ -231,10 +233,9 @@ export function SendPaymentConfirmationModal({
               <button
                 type="button"
                 onClick={handleCopyMessage}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-emerald-700 cursor-pointer"
+                className="text-xs font-semibold text-slate-600 hover:text-emerald-700 cursor-pointer"
               >
-                {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
-                <span>{copied ? 'Copied' : 'Copy Text'}</span>
+                {copied ? 'Copied to Clipboard' : 'Copy Text'}
               </button>
             </div>
             <textarea
@@ -257,7 +258,7 @@ export function SendPaymentConfirmationModal({
             size="sm"
             onClick={handleMarkConfirmedOnly}
             disabled={isUpdating}
-            className="w-full sm:w-auto text-xs"
+            className="w-full sm:w-auto text-xs font-semibold"
           >
             Mark Confirmed (Without WhatsApp)
           </Button>
@@ -277,11 +278,9 @@ export function SendPaymentConfirmationModal({
               type="button"
               onClick={handleSendWhatsApp}
               disabled={isUpdating}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] active:bg-[#1caa51] text-white font-bold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all text-xs sm:text-sm cursor-pointer disabled:opacity-75"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center bg-[#25D366] hover:bg-[#20bd5a] active:bg-[#1caa51] text-white font-bold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all text-xs sm:text-sm cursor-pointer disabled:opacity-75"
             >
-              <MessageSquare size={16} />
-              <span>Send via WhatsApp</span>
-              <ExternalLink size={14} />
+              Send via WhatsApp
             </button>
           </div>
         </div>

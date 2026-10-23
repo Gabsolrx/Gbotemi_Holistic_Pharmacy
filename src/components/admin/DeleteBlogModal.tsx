@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Trash2, X, Loader2, Newspaper } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { blogService } from '../../services/blogService';
 import toast from 'react-hot-toast';
@@ -32,7 +31,7 @@ export function DeleteBlogModal({ isOpen, onClose, post, onSuccess }: DeleteBlog
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 font-sans">
       <div 
         className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
@@ -40,18 +39,18 @@ export function DeleteBlogModal({ isOpen, onClose, post, onSuccess }: DeleteBlog
         <button 
           onClick={onClose}
           disabled={isDeleting}
-          className="absolute right-4 top-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
+          className="absolute right-4 top-4 px-2.5 py-1 text-sm font-bold text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
         >
-          <X size={20} />
+          ✕
         </button>
 
         <div className="p-6 sm:p-8 flex flex-col items-center text-center">
-          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-6 ring-8 ring-red-50">
-            <AlertTriangle size={32} />
-          </div>
+          <span className="text-xs font-bold uppercase tracking-wider text-red-700 bg-red-50 px-2.5 py-1 rounded-md mb-3">
+            Delete Post
+          </span>
 
           <h3 className="text-xl font-bold text-slate-900 mb-2">Delete Blog Post?</h3>
-          <p className="text-slate-500 mb-6 max-w-sm">
+          <p className="text-slate-500 mb-6 max-w-sm text-sm">
             Are you sure you want to permanently delete this post? This action cannot be undone.
           </p>
 
@@ -60,7 +59,7 @@ export function DeleteBlogModal({ isOpen, onClose, post, onSuccess }: DeleteBlog
                {post.imageUrl ? (
                  <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
                ) : (
-                 <Newspaper size={20} className="text-slate-500" />
+                 <span className="text-[10px] text-slate-400 font-bold">BLOG</span>
                )}
             </div>
             <div>
@@ -81,17 +80,10 @@ export function DeleteBlogModal({ isOpen, onClose, post, onSuccess }: DeleteBlog
             <Button 
               onClick={handleDelete}
               disabled={isDeleting}
-              className="w-full sm:flex-1 bg-red-600 hover:bg-red-700 text-white gap-2 border-red-600 hover:border-red-700 shadow-sm shadow-red-600/20"
+              isLoading={isDeleting}
+              className="w-full sm:flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700 shadow-sm"
             >
-              {isDeleting ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" /> Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash2 size={18} /> Delete Post
-                </>
-              )}
+              Delete Post
             </Button>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Newspaper, Plus, Search, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { blogService } from '../../services/blogService';
 import { BlogFormModal } from '../../components/admin/BlogFormModal';
@@ -56,27 +55,26 @@ export default function AdminBlog() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Blog Management</h1>
           <p className="text-sm text-slate-500 mt-0.5">Manage posts, categories, and educational content.</p>
         </div>
-        <Button className="gap-2 self-start sm:self-auto shadow-sm" onClick={handleAdd}>
-          <Plus size={18} /> New Post
+        <Button className="self-start sm:self-auto shadow-sm font-semibold" onClick={handleAdd}>
+          + New Post
         </Button>
       </div>
       
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4 bg-slate-50/50">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
               type="text" 
               placeholder="Search posts by title or category..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white shadow-sm"
+              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white shadow-sm"
             />
           </div>
         </div>
@@ -102,7 +100,6 @@ export default function AdminBlog() {
               ) : filteredPosts.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
-                    <Newspaper className="mx-auto text-slate-300 mb-2" size={32} />
                     <p className="font-medium text-slate-700">No posts found</p>
                     <p className="text-sm mt-1 text-slate-500">Create your first blog post to get started.</p>
                   </td>
@@ -116,7 +113,7 @@ export default function AdminBlog() {
                           {post.imageUrl ? (
                             <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
                           ) : (
-                            <Newspaper size={20} className="text-slate-400" />
+                            <span className="text-[10px] font-bold text-slate-400">BLOG</span>
                           )}
                         </div>
                         <div className="max-w-[250px] truncate">
@@ -140,17 +137,15 @@ export default function AdminBlog() {
                       <div className="flex items-center justify-end gap-2">
                         <button 
                           onClick={() => handleEdit(post)}
-                          className="p-2 text-slate-400 hover:text-primary-600 transition-colors rounded-xl hover:bg-primary-50" 
-                          title="Edit"
+                          className="px-2.5 py-1 text-xs font-semibold text-primary-700 hover:bg-primary-50 rounded-lg border border-primary-200 transition-colors"
                         >
-                          <Edit size={18} />
+                          Edit
                         </button>
                         <button 
                           onClick={() => handleDelete(post)}
-                          className="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-xl hover:bg-red-50" 
-                          title="Delete"
+                          className="px-2.5 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition-colors"
                         >
-                          <Trash2 size={18} />
+                          Delete
                         </button>
                       </div>
                     </td>

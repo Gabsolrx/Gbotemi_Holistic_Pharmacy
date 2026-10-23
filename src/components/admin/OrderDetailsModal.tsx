@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { X, Package, MapPin, CreditCard, Clock, CheckCircle, MessageSquare, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { formatCurrency } from '../../utils/format';
 import { Order, OrderStatus } from '../../types';
@@ -31,25 +30,25 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
   const statusOptions: OrderStatus[] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 font-sans">
       <div 
         className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
       >
         <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white flex-shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-slate-900">
               Order #{order.id.replace('ORD-', '')}
             </h2>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <Clock size={12} /> {new Date(order.createdAt).toLocaleString()}
+            <p className="text-xs text-slate-500 mt-1">
+              Date: {new Date(order.createdAt).toLocaleString()}
             </p>
           </div>
           <button 
             onClick={onClose} 
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+            className="px-2.5 py-1 text-sm font-bold text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
           >
-            <X size={20} />
+            ✕
           </button>
         </div>
 
@@ -61,8 +60,8 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
               
               {/* Items */}
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <Package size={18} className="text-primary-600" /> Order Items
+                <h3 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider text-primary-800">
+                  Order Items
                 </h3>
                 <div className="space-y-4">
                   {order.items.map((item) => (
@@ -86,8 +85,8 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
 
               {/* Status Update */}
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <CheckCircle size={18} className="text-primary-600" /> Fulfillment Status
+                <h3 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider text-primary-800">
+                  Fulfillment Status
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {statusOptions.map((status) => (
@@ -110,7 +109,9 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
             {/* Right Column: Customer Info */}
             <div className="space-y-6">
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-4">Customer Details</h3>
+                <h3 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider text-slate-700">
+                  Customer Details
+                </h3>
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs text-slate-500 mb-1">Name</p>
@@ -120,12 +121,18 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
                     <p className="text-xs text-slate-500 mb-1">Email</p>
                     <p className="font-medium text-sm text-slate-900 break-all">{order.customerEmail}</p>
                   </div>
+                  {order.customerPhone && (
+                    <div>
+                      <p className="text-xs text-slate-500 mb-1">Phone</p>
+                      <p className="font-medium text-sm text-slate-900">{order.customerPhone}</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <MapPin size={16} className="text-slate-400" /> Shipping
+                <h3 className="font-bold text-slate-900 mb-4 uppercase text-xs tracking-wider text-slate-700">
+                  Shipping Address
                 </h3>
                 <p className="text-sm text-slate-700 leading-relaxed">
                   {order.shippingAddress}
@@ -135,9 +142,8 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
               {/* Uploaded Payment Receipt (Supabase) */}
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                    <FileText size={16} className="text-emerald-700" />
-                    <span>Payment Receipt (Supabase)</span>
+                  <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-emerald-900">
+                    Payment Receipt
                   </h3>
                   {order.receiptUrl ? (
                     <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
@@ -154,15 +160,14 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
                   <div className="space-y-3">
                     <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-200 text-xs space-y-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-bold text-emerald-950">Supabase Document Link:</span>
+                        <span className="font-bold text-emerald-950">Document Link:</span>
                         <a
                           href={order.receiptUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-bold text-primary-700 hover:text-primary-800 hover:underline bg-white px-2.5 py-1 rounded-lg border border-emerald-300 shadow-2xs"
+                          className="font-bold text-primary-700 hover:text-primary-800 hover:underline bg-white px-2.5 py-1 rounded-lg border border-emerald-300 shadow-2xs"
                         >
-                          <span>Open Document</span>
-                          <ExternalLink size={12} />
+                          Open Document
                         </a>
                       </div>
                       <p className="font-mono text-[11px] text-slate-600 break-all select-all bg-white/90 p-2 rounded border border-emerald-100">
@@ -170,10 +175,9 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
                       </p>
                     </div>
 
-                    {/* Image Preview Thumbnail if image */}
                     {!order.receiptUrl.toLowerCase().endsWith('.pdf') && (
                       <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 p-2 text-center">
-                        <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer" title="Click to view full image in new tab">
+                        <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer">
                           <img 
                             src={order.receiptUrl} 
                             alt="Receipt Preview" 
@@ -192,20 +196,20 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
               </div>
 
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                <h3 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <CreditCard size={16} className="text-slate-400" /> Payment & Confirmation
+                <h3 className="font-bold text-slate-900 mb-2 uppercase text-xs tracking-wider text-slate-700">
+                  Payment Status
                 </h3>
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 inline-block">
-                      Bank Transfer (Moniepoint MFB)
+                      Bank Transfer
                     </p>
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
                       order.paymentStatus === 'confirmed'
                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                         : 'bg-amber-100 text-amber-800 border border-amber-300'
                     }`}>
-                      {order.paymentStatus === 'confirmed' ? '✓ Payment Confirmed' : 'Payment Pending'}
+                      {order.paymentStatus === 'confirmed' ? 'Payment Confirmed' : 'Payment Pending'}
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-mono">
@@ -217,10 +221,9 @@ export function OrderDetailsModal({ isOpen, onClose, order, onUpdateStatus, onPa
                   <button
                     type="button"
                     onClick={() => setShowConfirmModal(true)}
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] active:bg-[#1caa51] text-white font-bold py-2.5 px-3.5 rounded-xl shadow-xs hover:shadow-sm transition-all text-xs cursor-pointer"
+                    className="w-full inline-flex items-center justify-center bg-[#25D366] hover:bg-[#20bd5a] active:bg-[#1caa51] text-white font-bold py-2.5 px-3.5 rounded-xl shadow-xs hover:shadow-sm transition-all text-xs cursor-pointer"
                   >
-                    <MessageSquare size={15} />
-                    <span>Send Prefilled WhatsApp Confirmation</span>
+                    Send WhatsApp Confirmation
                   </button>
                 </div>
               </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Filter, Eye, Trash2, MessageSquare, ShieldCheck, FileText, ExternalLink } from 'lucide-react';
 import { formatCurrency } from '../../utils/format';
 import { OrderStatus, Order } from '../../types';
 import toast from 'react-hot-toast';
@@ -36,7 +35,6 @@ export default function AdminOrders() {
       if (data && data.length > 0) {
         setOrders(data);
       } else {
-        // Sample orders for instant admin preview if database is fresh
         const sampleOrders = [
           {
             id: 'GBO-492104',
@@ -153,6 +151,7 @@ export default function AdminOrders() {
       if (error) console.warn('Supabase status update fallback:', error);
       
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+      setSelectedOrder(prev => (prev && prev.id === orderId ? { ...prev, status: newStatus } : prev));
       toast.success(`Order status updated to ${newStatus}`);
     } catch (err) {
       toast.error('Failed to update status');
@@ -183,7 +182,6 @@ export default function AdminOrders() {
 
   const handleDeleteOrder = async (orderId: string) => {
     try {
-      // Delete order_items first due to foreign key constraints
       try {
         await supabase.from('order_items').delete().eq('order_id', orderId);
         await supabase.from('orders').delete().eq('id', orderId);
@@ -201,7 +199,7 @@ export default function AdminOrders() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Manage Orders</h1>
@@ -214,18 +212,16 @@ export default function AdminOrders() {
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4 bg-slate-50/50">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input 
               type="text" 
               placeholder="Search by order ID, name, email, phone..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white shadow-sm"
+              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white shadow-sm"
             />
           </div>
           
           <div className="flex items-center gap-2">
-            <Filter size={18} className="text-slate-400 hidden sm:block" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as OrderStatus | 'all')}
@@ -245,10 +241,10 @@ export default function AdminOrders() {
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
               <tr>
-                <th className="px-5 py-4">Order Details</th>
+                <th className="px-5 py-4">Order ID</th>
                 <th className="px-5 py-4">Customer</th>
                 <th className="px-5 py-4">Total</th>
-                <th className="px-5 py-4">Payment Status</th>
+                <th className="px-5 py-4">Payment</th>
                 <th className="px-5 py-4">Fulfillment</th>
                 <th className="px-5 py-4 text-right">Actions</th>
               </tr>
@@ -263,7 +259,6 @@ export default function AdminOrders() {
               ) : filteredOrders.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    <ShoppingCart className="mx-auto text-slate-300 mb-2" size={32} />
                     <p className="font-medium text-slate-700">No orders found.</p>
                   </td>
                 </tr>
@@ -293,19 +288,16 @@ export default function AdminOrders() {
                       <td className="px-5 py-4">
                         <div className="flex flex-col gap-1.5 items-start">
                           {isPaymentConfirmed ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                              <ShieldCheck size={13} className="text-emerald-700" />
-                              <span>Confirmed</span>
+                            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                              Confirmed
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={() => setPaymentConfirmOrder(mapToOrder(order))}
-                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors cursor-pointer"
-                              title="Confirm Payment & Send Prefilled Message"
+                              className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors cursor-pointer"
                             >
-                              <MessageSquare size={13} className="text-amber-700" />
-                              <span>Confirm Payment</span>
+                              Confirm Payment
                             </button>
                           )}
 
@@ -317,12 +309,9 @@ export default function AdminOrders() {
                                 href={o.receiptUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-primary-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 hover:underline"
-                                title="View Supabase Payment Receipt Document"
+                                className="text-[11px] font-bold text-primary-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 hover:underline"
                               >
-                                <FileText size={11} />
-                                <span>Receipt Link</span>
-                                <ExternalLink size={10} />
+                                View Receipt
                               </a>
                             );
                           })()}
@@ -344,24 +333,21 @@ export default function AdminOrders() {
                       <td className="px-5 py-4 text-right space-x-1.5">
                         <button 
                           onClick={() => setPaymentConfirmOrder(mapToOrder(order))}
-                          className="p-2 text-emerald-700 hover:text-emerald-900 transition-colors rounded-xl hover:bg-emerald-50 inline-flex" 
-                          title="Send Prefilled WhatsApp Payment Confirmation"
+                          className="px-2.5 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 border border-emerald-200 rounded-lg transition-colors"
                         >
-                          <MessageSquare size={18} />
+                          WhatsApp
                         </button>
                         <button 
                           onClick={() => handleViewOrder(order)}
-                          className="p-2 text-slate-400 hover:text-primary-600 transition-colors rounded-xl hover:bg-primary-50 inline-flex" 
-                          title="View Details"
+                          className="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors"
                         >
-                          <Eye size={18} />
+                          View
                         </button>
                         <button 
                           onClick={() => setOrderToDelete(order.id)}
-                          className="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-xl hover:bg-red-50 inline-flex" 
-                          title="Delete Order"
+                          className="px-2.5 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 rounded-lg transition-colors"
                         >
-                          <Trash2 size={18} />
+                          Delete
                         </button>
                       </td>
                     </tr>
@@ -377,7 +363,7 @@ export default function AdminOrders() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
             <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Order</h3>
-            <p className="text-slate-500 mb-6">Are you sure you want to delete this order? This action cannot be undone.</p>
+            <p className="text-slate-500 mb-6 text-sm">Are you sure you want to delete this order? This action cannot be undone.</p>
             <div className="flex gap-3 justify-end">
               <button 
                 onClick={() => setOrderToDelete(null)}

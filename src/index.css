@@ -8,9 +8,18 @@
   --color-primary-400: #4ade80;
   --color-primary-500: #22c55e;
   --color-primary-600: #16a34a;
-  --color-primary-700: #15803d; /* Emerald green */
-  --color-primary-800: #166534; /* Deep green */
-  --color-primary-900: #14532d;
+  --color-primary-700: #087F5B; /* Primary emerald */
+  --color-primary-800: #064E3B; /* Deep forest green */
+  --color-primary-900: #033D2E; /* Rich dark green */
+  
+  --color-brand-emerald: #087F5B;
+  --color-brand-forest: #064E3B;
+  --color-brand-richgreen: #033D2E;
+  --color-brand-ivory: #FAF8F0;
+  --color-brand-mint: #E6F4EC;
+  --color-brand-text: #17372C;
+  --color-brand-muted: #65776D;
+  --color-brand-lime: #C5E86C;
   
   --color-accent-orange: #ea580c; /* Burnt orange */
   --color-accent-mustard: #eab308; /* Mustard yellow */
@@ -55,5 +64,34 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', var(--font-sans);
   }
+}
+
+@keyframes moveLeftToRightInterval {
+  0% {
+    transform: translateX(-80%);
+    opacity: 0;
+  }
+  15% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  85% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  98% {
+    transform: translateX(80%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-80%);
+    opacity: 0;
+  }
+}
+
+.animate-announcement-ltr {
+  display: inline-block;
+  will-change: transform, opacity;
+  animation: moveLeftToRightInterval 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 

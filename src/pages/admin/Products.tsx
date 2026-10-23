@@ -1,4 +1,3 @@
-import { Package, Plus, Edit, Trash2, Search, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from '../../components/ui/Button';
 import { formatCurrency } from '../../utils/format';
@@ -72,27 +71,26 @@ export default function AdminProducts() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Inventory Management</h1>
           <p className="text-sm text-slate-500 mt-0.5">Add, update, or remove products and manage stock levels.</p>
         </div>
-        <Button className="gap-2 self-start sm:self-auto shadow-sm" onClick={handleAdd}>
-          <Plus size={18} /> Add Product
+        <Button className="self-start sm:self-auto shadow-sm font-semibold" onClick={handleAdd}>
+          + Add Product
         </Button>
       </div>
       
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4">
           <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
             <input 
               type="text" 
-              placeholder="Search products by name or brand..." 
+              placeholder="Search products by name, brand, or category..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
             />
           </div>
         </div>
@@ -113,14 +111,12 @@ export default function AdminProducts() {
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    <Loader2 className="mx-auto text-primary-500 mb-2 animate-spin" size={32} />
                     Loading products...
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    <Package className="mx-auto text-slate-300 mb-2" size={32} />
                     No products found.
                   </td>
                 </tr>
@@ -129,7 +125,7 @@ export default function AdminProducts() {
                   <tr key={product.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 flex items-center justify-center border border-slate-100">
                           {(product.imageUrl || product.image_url) ? (
                             <img 
                               src={product.imageUrl || product.image_url} 
@@ -141,7 +137,7 @@ export default function AdminProducts() {
                               }}
                             />
                           ) : (
-                            <Package className="w-6 h-6 m-auto text-slate-400 mt-2" />
+                            <span className="text-[10px] text-slate-400 font-bold">MED</span>
                           )}
                         </div>
                         <div>
@@ -150,13 +146,13 @@ export default function AdminProducts() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-700">{product.brand}</td>
+                    <td className="px-6 py-4 text-slate-700">{product.brand || '—'}</td>
                     <td className="px-6 py-4 font-medium text-slate-900">{formatCurrency(product.price)}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-                        product.stock_quantity <= product.low_stock_threshold ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                        (product.stock_quantity ?? product.stockQuantity) <= (product.low_stock_threshold ?? product.lowStockThreshold ?? 10) ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
                       }`}>
-                        {product.stock_quantity} in stock
+                        {product.stock_quantity ?? product.stockQuantity} in stock
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -170,17 +166,15 @@ export default function AdminProducts() {
                       <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => handleEdit(product)}
-                          title="Edit product"
-                          className="p-2 text-slate-400 hover:text-primary-600 transition-colors rounded-lg hover:bg-primary-50"
+                          className="px-3 py-1 text-xs font-semibold text-primary-700 hover:bg-primary-50 rounded-lg border border-primary-200 transition-colors"
                         >
-                          <Edit size={18} />
+                          Edit
                         </button>
                         <button 
                           onClick={() => openDeleteModal(product)}
-                          title="Delete product"
-                          className="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50"
+                          className="px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition-colors"
                         >
-                          <Trash2 size={18} />
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -207,7 +201,6 @@ export default function AdminProducts() {
         }}
         product={productToDelete}
         onSuccess={() => {
-          // Optimistically update list
           if (productToDelete) {
             setProducts(prev => prev.filter(p => p.id !== productToDelete.id));
           }

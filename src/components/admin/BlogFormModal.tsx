@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import toast from 'react-hot-toast';
 import { blogService } from '../../services/blogService';
-import { ProductImageInput } from './ProductImageInput'; // Re-using this since it handles URLs well
+import { ProductImageInput } from './ProductImageInput';
 
 interface BlogFormModalProps {
   isOpen: boolean;
@@ -81,7 +80,7 @@ export function BlogFormModal({ isOpen, onClose, post, onSuccess }: BlogFormModa
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-2 sm:p-4 md:p-6">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-2 sm:p-4 md:p-6 font-sans">
       <div 
         className="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col max-h-[92vh] sm:max-h-[88vh] my-auto overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200"
         role="dialog"
@@ -98,9 +97,9 @@ export function BlogFormModal({ isOpen, onClose, post, onSuccess }: BlogFormModa
           <button 
             type="button"
             onClick={onClose} 
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+            className="px-2.5 py-1 text-sm font-bold text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
           >
-            <X size={20} />
+            ✕
           </button>
         </div>
 
@@ -169,7 +168,7 @@ export function BlogFormModal({ isOpen, onClose, post, onSuccess }: BlogFormModa
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
               Cancel
             </Button>
-            <Button type="submit" isLoading={isLoading} className="gap-2">
+            <Button type="submit" isLoading={isLoading}>
               {post ? 'Save Changes' : 'Publish Post'}
             </Button>
           </div>

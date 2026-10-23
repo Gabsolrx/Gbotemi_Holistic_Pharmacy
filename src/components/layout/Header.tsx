@@ -23,6 +23,27 @@ export default function Header() {
   const location = useLocation();
 
   const [cmsConfig, setCmsConfig] = useState<CmsConfig | null>(null);
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+
+  const announcementsList = cmsConfig?.storeSettings?.announcements?.length
+    ? cmsConfig.storeSettings.announcements
+    : [
+        'Free delivery on orders above ₦10,000! • Gbotemi Holistic Pharmacy',
+        'Upload your prescription online for rapid verification & doorstep dispatch • Gbotemi Care',
+        'Need medication advice? Speak directly with our licensed pharmacist • Gbotemi Holistic',
+        '100% Genuine, NAFDAC-certified medications & wellness essentials • Gbotemi Pharmacy',
+      ];
+
+  // Rotate announcement text at regular interval (5.5s)
+  useEffect(() => {
+    if (announcementsList.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentAnnouncementIndex((prev) => (prev + 1) % announcementsList.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [announcementsList.length]);
+
+  const activeAnnouncement = announcementsList[currentAnnouncementIndex % announcementsList.length] || announcementsList[0];
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -58,11 +79,16 @@ export default function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       {/* Announcement Bar */}
       {(!cmsConfig || cmsConfig.storeSettings.announcementEnabled) && (
-        <div className="w-full bg-primary-800 text-white text-xs sm:text-sm py-2">
+        <div className="w-full bg-primary-800 text-white text-xs sm:text-sm py-2 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p className="font-medium text-center sm:text-left truncate max-w-xl xl:max-w-2xl">
-              {cmsConfig?.storeSettings.announcementBar || 'Free delivery on orders above ₦10,000! • Gbotemi Holistic Pharmacy'}
-            </p>
+            <div className="overflow-hidden w-full sm:max-w-xl xl:max-w-2xl text-center sm:text-left py-0.5">
+              <span
+                key={currentAnnouncementIndex}
+                className="animate-announcement-ltr font-medium inline-block whitespace-nowrap text-emerald-50"
+              >
+                {activeAnnouncement}
+              </span>
+            </div>
             <div className="flex items-center gap-5 text-primary-100 hidden md:flex shrink-0 text-xs sm:text-sm">
               <a href={`tel:${cmsConfig?.storeSettings.supportPhone || '08029660153'}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
                 <Phone size={13} /> <span>{cmsConfig?.storeSettings.supportPhone || '+2348029660153'}</span>
@@ -127,6 +153,14 @@ export default function Header() {
               <Link to="/account" className="flex flex-col items-center hover:text-primary-700 transition-colors">
                 <User size={24} />
                 <span className="text-xs mt-1 font-medium hidden sm:block">Account</span>
+              </Link>
+
+              {/* Shop Now CTA Button */}
+              <Link
+                to="/shop"
+                className="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 bg-[#087F5B] hover:bg-[#064E3B] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-all active:scale-95"
+              >
+                <span>Shop Now</span>
               </Link>
               
               {/* Mobile Menu Toggle */}

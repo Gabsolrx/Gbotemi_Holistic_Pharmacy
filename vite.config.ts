@@ -26,6 +26,9 @@ export default defineConfig(() => {
               if (id.includes('recharts') || id.includes('d3')) {
                 return 'vendor-charts';
               }
+              if (id.includes('three')) {
+                return 'vendor-three';
+              }
               if (id.includes('@supabase')) {
                 return 'vendor-supabase';
               }

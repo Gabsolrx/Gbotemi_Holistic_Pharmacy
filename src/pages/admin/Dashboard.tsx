@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, ShoppingCart, FileText, AlertTriangle, ArrowUpRight, Users, Package, Activity, MessageSquare } from 'lucide-react';
 import { formatCurrency } from '../../utils/format';
 import { productService } from '../../services/productService';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { supabase } from '../../lib/supabase';
 
 const revenueData = [
@@ -34,9 +33,6 @@ export default function AdminDashboard() {
 
         const { data: ords } = await supabase.from('orders').select('*');
         if (ords) setOrders(ords);
-
-
-
       } catch (e) {
         console.error(e);
       }
@@ -48,17 +44,7 @@ export default function AdminDashboard() {
     };
   }, []);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const todayOrders = orders.filter(order => {
-    const orderDate = new Date(order.created_at);
-    return orderDate >= today;
-  });
-
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
-  const todayRevenue = todayOrders.reduce((sum, order) => sum + order.total_amount, 0);
-
+  const totalRevenue = orders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
   const pendingOrders = orders.filter(o => o.status === 'pending');
   
   const lowStockProducts = liveProducts.filter(
@@ -66,22 +52,21 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 font-sans">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard Overview</h1>
-        <p className="text-sm text-slate-500 mt-1">Here's what's happening at Gbotemi Holistic Pharmacy today.</p>
+        <p className="text-sm text-slate-500 mt-1">Operational metrics and activity at Gbotemi Holistic Pharmacy.</p>
       </div>
       
-      {/* Metric Cards */}
+      {/* Metric Cards (No Icons) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-primary-200 transition-colors">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-primary-50 to-white rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-primary-50 text-primary-600 rounded-xl">
-              <DollarSign size={24} />
-            </div>
-            <span className="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">
-              <ArrowUpRight size={14} className="mr-1" /> +12%
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-primary-700 bg-primary-50 px-2.5 py-1 rounded-md">
+              Finance
+            </span>
+            <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-1 rounded-md">
+              +12% vs last wk
             </span>
           </div>
           <div>
@@ -90,14 +75,13 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-blue-200 transition-colors">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-blue-50 to-white rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
-              <ShoppingCart size={24} />
-            </div>
-            <span className="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">
-              <ArrowUpRight size={14} className="mr-1" /> +8%
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md">
+              Orders
+            </span>
+            <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-1 rounded-md">
+              +8% active
             </span>
           </div>
           <div>
@@ -106,12 +90,14 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-purple-200 transition-colors">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-purple-50 to-white rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
-              <Package size={24} />
-            </div>
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md">
+              Inventory
+            </span>
+            <span className="text-xs text-slate-500 font-medium">
+              Live Stock
+            </span>
           </div>
           <div>
             <h3 className="text-slate-500 text-sm font-medium mb-1">Active Products</h3>
@@ -119,16 +105,18 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden group hover:border-amber-200 transition-colors">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-br from-amber-50 to-white rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
-              <Activity size={24} />
-            </div>
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
+              Queue
+            </span>
+            <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+              {pendingOrders.length}
+            </span>
           </div>
           <div>
-            <h3 className="text-slate-500 text-sm font-medium mb-1">Pending Actions</h3>
-
+            <h3 className="text-slate-500 text-sm font-medium mb-1">Pending Orders</h3>
+            <p className="text-2xl font-bold text-slate-900">{pendingOrders.length}</p>
           </div>
         </div>
       </div>
@@ -146,8 +134,8 @@ export default function AdminDashboard() {
                 <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#047857" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#047857" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -157,7 +145,7 @@ export default function AdminDashboard() {
                     contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     formatter={(value: number) => [`₦${value}`, 'Revenue']}
                   />
-                  <Area type="monotone" dataKey="revenue" stroke="#0ea5e9" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                  <Area type="monotone" dataKey="revenue" stroke="#047857" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -178,45 +166,40 @@ export default function AdminDashboard() {
                     cursor={{fill: '#f8fafc'}}
                     contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   />
-                  <Bar dataKey="sales" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
+                  <Bar dataKey="sales" fill="#047857" radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
 
-        {/* Action Center */}
+        {/* Action Center (No Icons) */}
         <div className="space-y-6">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-100 bg-slate-50/50">
               <h2 className="font-bold text-slate-900">Action Required</h2>
             </div>
             <div className="divide-y divide-slate-100">
-              <div className="p-4 flex items-start gap-4 hover:bg-slate-50 transition-colors">
-                <div className="p-2 bg-amber-100 text-amber-700 rounded-lg shrink-0 mt-1">
-                  <ShoppingCart size={18} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">Pending Orders ({pendingOrders.length})</h4>
-                  <p className="text-xs text-slate-500 mt-1">Orders waiting to be processed and shipped.</p>
-                </div>
+              <div className="p-4 hover:bg-slate-50 transition-colors">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
+                  Pending Order Review
+                </span>
+                <h4 className="font-bold text-slate-900 text-sm mt-1">Pending Orders ({pendingOrders.length})</h4>
+                <p className="text-xs text-slate-500 mt-1">Customer orders waiting to be confirmed, packaged, and dispatched.</p>
               </div>
-              <div className="p-4 flex items-start gap-4 hover:bg-slate-50 transition-colors">
-                <div className="p-2 bg-red-100 text-red-700 rounded-lg shrink-0 mt-1">
-                  <FileText size={18} />
-                </div>
-                <div>
-
-                  <p className="text-xs text-slate-500 mt-1">Patient uploaded prescriptions pending pharmacist approval.</p>
-                </div>
+              <div className="p-4 hover:bg-slate-50 transition-colors">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 bg-blue-100 px-2 py-0.5 rounded">
+                  Prescriptions
+                </span>
+                <h4 className="font-bold text-slate-900 text-sm mt-1">Rx Upload Queue</h4>
+                <p className="text-xs text-slate-500 mt-1">Patient uploaded prescriptions requiring licensed pharmacist review.</p>
               </div>
-</div>
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-80">
             <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-              <h2 className="font-bold text-slate-900 flex items-center gap-2">
-                <AlertTriangle size={18} className="text-amber-500" />
+              <h2 className="font-bold text-slate-900">
                 Low Stock Alerts
               </h2>
               <span className="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-full">{lowStockProducts.length}</span>
@@ -224,8 +207,7 @@ export default function AdminDashboard() {
             <div className="flex-1 overflow-y-auto">
               {lowStockProducts.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center p-6 text-center text-slate-500">
-                  <Package className="mb-2 text-slate-300" size={32} />
-                  <p className="text-sm">All product inventory levels are optimal.</p>
+                  <p className="text-sm font-medium">All product inventory levels are optimal.</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-100">

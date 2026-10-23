@@ -3,7 +3,6 @@ import { useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ShieldAlert, ArrowRight, Lock, ArrowLeft, AlertCircle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { supabase } from '../../lib/supabase';
@@ -30,7 +29,6 @@ export default function AdminLogin() {
     resolver: zodResolver(adminLoginSchema),
   });
 
-  // If already logged in as admin, redirect to dashboard
   if (user && (user.role === 'admin' || user.role === 'super_admin')) {
     return <Navigate to="/admin" replace />;
   }
@@ -46,8 +44,6 @@ export default function AdminLogin() {
       if (error) {
         toast.error('Invalid admin credentials.');
       } else {
-        // Check if user is actually an admin (this is a client-side check, 
-        // real security is enforced by RLS in Supabase)
         const { data: profile } = await supabase
           .from('profiles')
           .select('role')
@@ -70,25 +66,23 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
         
-        {/* Decorative Top Accent */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-primary-500 to-blue-500"></div>
+        <div className="absolute top-0 left-0 w-full h-2 bg-[#047857]"></div>
         
         <div className="text-center">
-          <div className="w-16 h-16 bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
-            <ShieldAlert size={36} />
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Admin Portal</h2>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#047857] bg-[#ECFDF5] px-3 py-1 rounded-full inline-block mb-3">
+            Admin Access Portal
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Admin Sign In</h2>
           <p className="mt-1 text-sm text-slate-500 font-medium">
             Restricted Access. Authorized personnel only.
           </p>
         </div>
 
         {isUnauthorizedRedirect && (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-amber-800 text-xs">
-            <AlertCircle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs">
             <span>You need administrator credentials to access the Admin Dashboard. Please sign in below.</span>
           </div>
         )}
@@ -114,16 +108,16 @@ export default function AdminLogin() {
             />
           </div>
           
-          <Button type="submit" className="w-full gap-2 bg-slate-900 hover:bg-slate-800 text-white" size="lg" isLoading={isLoading}>
-            <Lock size={18} /> Authenticate <ArrowRight size={18} />
+          <Button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold" size="lg" isLoading={isLoading}>
+            Authenticate
           </Button>
 
           <div className="pt-3 text-center">
             <Link 
               to="/" 
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
             >
-              <ArrowLeft size={14} /> Back to Storefront
+              Back to Storefront
             </Link>
           </div>
         </form>
