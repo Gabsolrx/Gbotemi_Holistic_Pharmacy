@@ -106,7 +106,7 @@ const DEFAULT_SLIDES_DISPLAY: HeroSlideDisplay[] = [
       text: 'Talk to a Pharmacist',
       link: '/consultation',
     },
-    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874743059_qpxpao.jpeg',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_consultation_1792847297611.jpeg',
     badges: {
       topBadge: {
         title: 'Licensed Pharmacist Online',
@@ -121,9 +121,50 @@ const DEFAULT_SLIDES_DISPLAY: HeroSlideDisplay[] = [
   },
 ];
 
+interface HeroBottomBadgeItem {
+  title: string;
+  mobileTitle: string;
+  subtitle: string;
+  mobileSubtitle: string;
+}
+
+const HERO_BOTTOM_BADGES: HeroBottomBadgeItem[] = [
+  {
+    title: '100% Genuine Care',
+    mobileTitle: '100% Genuine',
+    subtitle: 'NAFDAC Regulated & Sourced From Certified Manufacturers',
+    mobileSubtitle: 'NAFDAC Regulated & Certified',
+  },
+  {
+    title: 'Same-Day Dispatch',
+    mobileTitle: 'Same-Day Dispatch',
+    subtitle: 'Fast Courier in Osogbo, Ede & Nationwide Waybill Transit',
+    mobileSubtitle: 'Fast Courier in Osogbo & Nationwide',
+  },
+  {
+    title: 'Licensed Pharmacists',
+    mobileTitle: 'Licensed Care',
+    subtitle: 'Professional Clinical Guidance & Dosage Consultation',
+    mobileSubtitle: 'Expert Clinical Guidance & Advice',
+  },
+  {
+    title: 'Cold-Chain Assured',
+    mobileTitle: 'Cold-Chain',
+    subtitle: 'Safe Temperature Preservation for Sensitive Medications',
+    mobileSubtitle: 'Safe Temperature Preservation',
+  },
+  {
+    title: 'Encrypted & Confidential',
+    mobileTitle: 'Encrypted Care',
+    subtitle: 'Direct Superintendent Pharmacist Prescription Review',
+    mobileSubtitle: 'Confidential Pharmacist Review',
+  },
+];
+
 export function PharmacyHeroCarousel() {
   const [slides, setSlides] = useState<HeroSlideDisplay[]>(DEFAULT_SLIDES_DISPLAY);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [badgeIndex, setBadgeIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -131,6 +172,14 @@ export function PharmacyHeroCarousel() {
   const touchEndXRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(Date.now());
   const animationFrameRef = useRef<number | null>(null);
+
+  // Rotate the modern bottom card badges at regular interval (3.5s)
+  useEffect(() => {
+    const badgeTimer = setInterval(() => {
+      setBadgeIndex((prev) => (prev + 1) % HERO_BOTTOM_BADGES.length);
+    }, 3500);
+    return () => clearInterval(badgeTimer);
+  }, []);
 
   // Synchronize with cmsService and live Supabase config
   useEffect(() => {
@@ -291,24 +340,24 @@ export function PharmacyHeroCarousel() {
         <div className="absolute top-1/2 -right-32 w-[30rem] h-[30rem] bg-[#047857]/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl 2xl:max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8">
         {/* Main Hero Container — Solid backdrop, stable height to guarantee ZERO blank white flashes */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl border border-[#ECFDF5] shadow-sm p-5 sm:p-7 lg:p-9 relative overflow-hidden flex flex-col justify-between">
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-[#ECFDF5] shadow-sm p-4 sm:p-7 lg:p-9 relative overflow-hidden flex flex-col justify-between">
           
           {/* Two-Column Layout (Desktop) / Vertical Stack (Mobile) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center flex-grow">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-10 items-center flex-grow">
             
             {/* Left Column: Text & CTAs (Smooth crossfade without unmounting) */}
-            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-10 min-h-[260px] sm:min-h-[280px]">
+            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-10 min-h-[240px] sm:min-h-[280px]">
               {/* Clean Service Label (No Icons) */}
-              <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#ECFDF5] border border-[#047857]/20 text-[#047857] w-fit mb-3 sm:mb-4 shadow-2xs">
-                <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase font-sans">
+              <div className="inline-flex items-center px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#ECFDF5] border border-[#047857]/20 text-[#047857] w-fit mb-2.5 sm:mb-4 shadow-2xs">
+                <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase font-sans">
                   {currentSlide.label}
                 </span>
               </div>
 
-              {/* Bold Oversized Headline with Emerald Accent — No full stops at the end */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.15rem] xl:text-[3.5rem] font-bold text-[#17231E] leading-[1.14] tracking-tight font-sans transition-all duration-300">
+              {/* Bold Oversized Headline with Emerald Accent — Scaled smoothly for all screens */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[3.15rem] xl:text-[3.5rem] font-bold text-[#17231E] leading-[1.15] tracking-tight font-sans transition-all duration-300">
                 <span className="block">
                   {currentSlide.headlineLine1}
                 </span>
@@ -342,9 +391,9 @@ export function PharmacyHeroCarousel() {
               </div>
             </div>
 
-            {/* Right Column: Immersive Visual with Restored Floating Glassmorphic Overlay Badges */}
+            {/* Right Column: Immersive Visual with Modern Bottom Card Moving Badges from Left to Right */}
             <div className="lg:col-span-6 xl:col-span-6 relative w-full">
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-2xl overflow-hidden bg-[#ECFDF5] border border-[#047857]/15 shadow-md">
+              <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#ECFDF5] border border-[#047857]/15 shadow-md group">
                 {slides.map((slide, index) => {
                   const isActive = index === currentSlideIndex;
                   return (
@@ -358,49 +407,38 @@ export function PharmacyHeroCarousel() {
                       <img
                         src={slide.image}
                         alt={`${slide.headlineLine1} ${slide.headlineLine2}`}
-                        className="w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-102"
+                        className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-102"
                         loading={index === 0 ? 'eager' : 'lazy'}
                         referrerPolicy="no-referrer"
                       />
 
                       {/* Subtle elegant gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-                      {/* Floating Glassmorphic Badge: Top Right */}
-                      {slide.badges?.topBadge && (
-                        <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-20 max-w-[210px] sm:max-w-xs bg-white/95 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/70 shadow-lg shadow-emerald-950/10 pointer-events-none transition-all duration-300">
-                          <span className="text-[10px] font-bold text-[#047857] uppercase tracking-wider block">
-                            {slide.badges.topBadge.title}
-                          </span>
-                          <p className="text-[10px] sm:text-[11px] text-[#65776D] mt-0.5 leading-snug">
-                            {slide.badges.topBadge.subtitle}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Floating Glassmorphic Badge: Bottom Left */}
-                      {slide.badges?.bottomBadge && (
-                        <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 z-20 max-w-[230px] sm:max-w-xs bg-white/95 backdrop-blur-md rounded-xl p-2.5 sm:p-3 border border-white/70 shadow-lg shadow-emerald-950/10 pointer-events-none transition-all duration-300">
-                          <span className="text-[10px] font-bold text-[#064E3B] uppercase tracking-wider block">
-                            {slide.badges.bottomBadge.title}
-                          </span>
-                          <p className="text-[10px] sm:text-[11px] text-[#65776D] mt-0.5 leading-snug">
-                            {slide.badges.bottomBadge.subtitle}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Category Tag: Bottom Right */}
-                      {slide.categoryTag && (
-                        <div className="absolute bottom-3 right-3 z-20 hidden sm:block pointer-events-none">
-                          <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-white border border-white/20">
-                            {slide.categoryTag}
-                          </span>
-                        </div>
-                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                     </div>
                   );
                 })}
+
+                {/* Well-Designed Modern Card at the Bottom of Hero Banner Image */}
+                <div className="absolute bottom-2.5 sm:bottom-5 inset-x-2.5 sm:inset-x-5 md:inset-x-8 z-20 pointer-events-none">
+                  <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/95 shadow-xl shadow-emerald-950/20 px-2.5 py-2 sm:px-4 sm:py-3 md:px-5 md:py-3.5 overflow-hidden">
+                    <div className="relative overflow-hidden w-full flex items-center justify-center min-h-[30px] sm:min-h-[38px] md:min-h-[44px]">
+                      <div
+                        key={badgeIndex}
+                        className="animate-badge-ltr flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 max-w-full text-left"
+                      >
+                        <span className="text-[11px] sm:text-xs md:text-sm font-bold text-[#047857] uppercase tracking-wide bg-[#ECFDF5] px-2 sm:px-3.5 py-0.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[#047857]/20 shrink-0 shadow-2xs font-sans whitespace-nowrap">
+                          <span className="sm:hidden">{HERO_BOTTOM_BADGES[badgeIndex].mobileTitle}</span>
+                          <span className="hidden sm:inline">{HERO_BOTTOM_BADGES[badgeIndex].title}</span>
+                        </span>
+                        <span className="text-[11px] sm:text-xs md:text-sm text-[#17231E] font-semibold truncate font-sans min-w-0">
+                          <span className="sm:hidden">{HERO_BOTTOM_BADGES[badgeIndex].mobileSubtitle}</span>
+                          <span className="hidden sm:inline">{HERO_BOTTOM_BADGES[badgeIndex].subtitle}</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 

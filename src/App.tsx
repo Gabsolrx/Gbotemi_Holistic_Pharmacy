@@ -105,8 +105,15 @@ export default function App() {
             <Route path="payment-information" element={<InfoPage />} />
             <Route path="faq" element={<InfoPage />} />
             <Route path="privacy-policy" element={<InfoPage />} />
+            <Route path="privacy" element={<InfoPage />} />
             <Route path="terms" element={<InfoPage />} />
+            <Route path="terms-and-conditions" element={<InfoPage />} />
+            <Route path="terms-of-service" element={<InfoPage />} />
             <Route path="refund-policy" element={<InfoPage />} />
+            <Route path="refunds" element={<InfoPage />} />
+            <Route path="refund" element={<InfoPage />} />
+            <Route path="returns" element={<InfoPage />} />
+            <Route path="return-policy" element={<InfoPage />} />
             <Route path="products/:slug" element={<ProductDetails />} />
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />

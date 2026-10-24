@@ -45,6 +45,16 @@ export default function Header() {
 
   const activeAnnouncement = announcementsList[currentAnnouncementIndex % announcementsList.length] || announcementsList[0];
 
+  // Clean mobile text helper to prevent any text cutting off on narrow phone screens
+  const getMobileAnnouncement = (text: string): string => {
+    if (!text) return '';
+    // If the text contains the bullet divider, take the punchy first section for mobile
+    if (text.includes('•')) {
+      return text.split('•')[0].trim();
+    }
+    return text;
+  };
+
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -77,19 +87,26 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Announcement Bar */}
+      {/* Announcement Bar — Fully responsive across all devices and mobile screens without clipping */}
       {(!cmsConfig || cmsConfig.storeSettings.announcementEnabled) && (
-        <div className="w-full bg-primary-800 text-white text-xs sm:text-sm py-2 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <div className="overflow-hidden w-full sm:max-w-xl xl:max-w-2xl text-center sm:text-left py-0.5">
-              <span
+        <div className="w-full bg-primary-800 text-white text-xs sm:text-sm py-1.5 sm:py-2 overflow-hidden border-b border-primary-700/50">
+          <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-1.5 sm:gap-2">
+            <div className="overflow-hidden w-full sm:max-w-xl xl:max-w-2xl text-center sm:text-left py-0.5 px-1 min-w-0 flex items-center justify-center sm:justify-start">
+              <div
                 key={currentAnnouncementIndex}
-                className="animate-announcement-ltr font-medium inline-block whitespace-nowrap text-emerald-50"
+                className="animate-announcement-ltr font-medium text-[11px] sm:text-xs md:text-sm text-emerald-50 text-center sm:text-left max-w-full"
               >
-                {activeAnnouncement}
-              </span>
+                {/* On mobile screens, display clean, punchy message that never clips edges */}
+                <span className="sm:hidden block px-1 text-center font-semibold tracking-wide">
+                  {getMobileAnnouncement(activeAnnouncement)}
+                </span>
+                {/* On tablet, desktop, and large displays, show full announcement text */}
+                <span className="hidden sm:inline-block whitespace-nowrap">
+                  {activeAnnouncement}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-5 text-primary-100 hidden md:flex shrink-0 text-xs sm:text-sm">
+            <div className="flex items-center gap-4 text-primary-100 hidden md:flex shrink-0 text-xs sm:text-sm">
               <a href={`tel:${cmsConfig?.storeSettings.supportPhone || '08029660153'}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
                 <Phone size={13} /> <span>{cmsConfig?.storeSettings.supportPhone || '+2348029660153'}</span>
               </a>

@@ -423,6 +423,206 @@ export default function InfoPage() {
         <p>Always pay driver or rider directly upon delivery. Delivery fees are separate from the medication cost and are settled directly with the courier, rider, or transport driver upon receipt of your parcel.</p>
       </div>
     );
+  } else if (path.includes('refund') || path.includes('return')) {
+    title = 'Refund & Return Policy';
+    content = (
+      <div className="space-y-8 text-gray-700 font-sans">
+        {/* Policy Banner */}
+        <div className="bg-gradient-to-r from-emerald-950 via-primary-800 to-emerald-900 text-white rounded-3xl p-6 sm:p-8 shadow-md">
+          <div className="max-w-3xl">
+            <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-emerald-100 text-xs font-semibold mb-3">
+              Pharmaceutical Health & Safety Regulations
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">
+              Gbotemi Holistic Pharmacy Refund & Return Policy
+            </h2>
+            <p className="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">
+              Committed to genuine medications, cold-chain safety, and the highest standards of the Pharmacy Council of Nigeria (PCN).
+            </p>
+          </div>
+        </div>
+
+        {/* Primary Policy Declaration Card */}
+        <div className="bg-red-50/80 border-2 border-red-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xs">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-red-800 bg-red-100 px-3 py-1 rounded-full">
+              Standard Pharmacy Rule
+            </span>
+          </div>
+          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
+            Strict Policy: We Do Not Accept Returns or Refunds for Products Purchased in Good Condition
+          </h3>
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+            In compliance with the <strong>Pharmacy Council of Nigeria (PCN)</strong>, <strong>NAFDAC Good Pharmacy Practice (GPP)</strong> guidelines, and international healthcare safety standards:
+          </p>
+          <div className="p-4 bg-white rounded-2xl border border-red-200 text-sm text-slate-800 leading-relaxed font-medium">
+            Medicines, prescription pharmaceuticals, health supplements, infant nutrition formulas, injectables, and medical consumables purchased in good condition <strong>CANNOT be returned, exchanged, or refunded once they have left the custody of Gbotemi Holistic Pharmacy</strong>.
+          </div>
+        </div>
+
+        {/* Clinical Rationale: Why This Protects You */}
+        <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-5">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+            Why We Maintain a Strict No-Return Policy on Good Condition Items
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Unlike general commercial retail goods, pharmaceuticals directly impact human life. Our strict policy protects you and the entire community:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1 text-xs sm:text-sm text-slate-700">
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+              <div>
+                <strong className="block text-slate-900 font-bold mb-1.5 text-sm">
+                  1. Cold-Chain & Storage Integrity
+                </strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Medications lose therapeutic potency if exposed to heat above 25°C, direct sunlight, or humidity. Once an item leaves our pharmacy, storage conditions cannot be independently verified.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+              <div>
+                <strong className="block text-slate-900 font-bold mb-1.5 text-sm">
+                  2. Anti-Counterfeiting & Tampering
+                </strong>
+                <p className="text-slate-600 leading-relaxed">
+                  To eliminate the risk of counterfeit substitution, contamination, or product tampering, no returned product is ever re-stocked or re-dispensed to another patient.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+              <div>
+                <strong className="block text-slate-900 font-bold mb-1.5 text-sm">
+                  3. Legal & PCN Compliance
+                </strong>
+                <p className="text-slate-600 leading-relaxed">
+                  Nigerian pharmaceutical regulations strictly prohibit registered pharmacies from accepting returned medications for restocking once patient possession has occurred.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Valid Exceptions Where Claims ARE Honored */}
+        <div className="bg-white border-2 border-emerald-600/30 rounded-3xl p-6 sm:p-8 space-y-5 shadow-xs">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-2">
+              Valid Claims
+            </span>
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+              Limited Exceptions Where Returns or Replacements Are Accepted
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              We stand 100% behind the quality and accuracy of our pharmacy service. We will gladly resolve any of the following verified issues:
+            </p>
+          </div>
+
+          <div className="space-y-3 text-sm sm:text-base text-slate-700">
+            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200">
+              <strong className="text-emerald-950 font-bold block mb-1">
+                A. Dispensing or Packaging Error by the Pharmacy
+              </strong>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                If our pharmacy staff accidentally dispensed a medication that differs from your verified doctor's prescription or your order confirmation (e.g. wrong drug, wrong dosage strength like 200mg instead of 400mg, or wrong quantity).
+              </p>
+            </div>
+
+            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200">
+              <strong className="text-emerald-950 font-bold block mb-1">
+                B. Manufacturer Defect or Compromised Factory Seal
+              </strong>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                If the product has an intact manufacturing defect, broken factory seal prior to unboxing, or is the subject of an official NAFDAC safety recall.
+              </p>
+            </div>
+
+            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200">
+              <strong className="text-emerald-950 font-bold block mb-1">
+                C. Proven Damage in Transit Prior to Receipt
+              </strong>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                If transit packaging arrived visibly crushed, leaking, or broken before delivery acceptance. (Please inspect your package upon delivery before signing or paying the rider/driver).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Claim Procedure & Timeframe */}
+        <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+            How to File an Eligible Claim (Within 24 Hours)
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-600">
+            To ensure swift clinical investigation and resolution, please follow these steps:
+          </p>
+
+          <ol className="list-decimal pl-5 space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <li>
+              <strong>Report Promptly:</strong> Notify our Superintendent Pharmacist within <strong>24 hours</strong> of receiving your delivery. Claims reported after 24 hours cannot be validated due to storage custody regulations.
+            </li>
+            <li>
+              <strong>Contact Channels:</strong> Send a WhatsApp message to <strong>+234 802 966 0153</strong> or email <strong>gbotemihpharmacy@gmail.com</strong>.
+            </li>
+            <li>
+              <strong>Provide Evidence:</strong> Include your Order ID, a brief explanation of the discrepancy, and clear photos or a short video showing the product, batch number, expiry date, and manufacturer seal.
+            </li>
+            <li>
+              <strong>Keep Product Unused:</strong> Do not open, tamper with, or consume the medication while the claim is being reviewed.
+            </li>
+          </ol>
+        </div>
+
+        {/* Resolution Process */}
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+            Resolution & Refund Timeline
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-700">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+              <strong className="block text-slate-900 font-bold mb-1">
+                Priority Replacement (Recommended)
+              </strong>
+              Where an error has occurred, we will immediately dispatch the correct medication to your address on priority at zero additional expense.
+            </div>
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+              <strong className="block text-slate-900 font-bold mb-1">
+                Direct Bank Refund
+              </strong>
+              If an identical product is out of stock, a full refund of the medication cost will be refunded directly to your original bank account within <strong>3 to 5 business days</strong>.
+            </div>
+          </div>
+        </div>
+
+        {/* Pre-Purchase Advisory CTA */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-emerald-50/80 border border-emerald-200 rounded-3xl">
+          <div>
+            <h4 className="font-bold text-emerald-950 text-base">
+              Need assistance before placing an order?
+            </h4>
+            <p className="text-xs sm:text-sm text-emerald-800 mt-0.5">
+              Chat directly with our licensed pharmacists to verify medication brand, dosage, and suitability before purchase.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <a
+              href="https://wa.me/2348029660153?text=Hello%20Gbotemi%20Holistic%20Pharmacy,%20I%20need%20assistance%20verifying%20a%20medication%20before%20placing%20my%20order"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto text-center"
+            >
+              <button
+                type="button"
+                className="w-full sm:w-auto bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded-xl shadow-md text-xs sm:text-sm transition-transform active:scale-95 cursor-pointer"
+              >
+                Chat with Pharmacist
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

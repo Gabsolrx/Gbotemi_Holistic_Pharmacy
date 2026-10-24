@@ -71,7 +71,7 @@ export const defaultHeroSlides: HeroSlide[] = [
     headlineFirst: 'Your wellness',
     headlineSecond: 'Our priority',
     description: 'Discover wellness essentials and trusted guidance.',
-    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_1787874743059_qpxpao.jpeg',
+    image: 'https://lwoyhhkbfmhklqrguuju.supabase.co/storage/v1/object/public/cms/hero_consultation_1792847297611.jpeg',
     primaryCta: { text: 'Explore Wellness →', link: '/shop?category=Wellness' },
     secondaryCta: { text: 'Talk to a Pharmacist', link: '/consultation' },
     styles: { titleColor: '#17231E', titleSize: 'text-4xl md:text-5xl lg:text-6xl', titleFont: 'font-sans', descColor: '#65776D' }

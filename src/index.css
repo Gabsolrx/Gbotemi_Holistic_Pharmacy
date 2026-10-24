@@ -66,25 +66,26 @@
   }
 }
 
-@keyframes moveLeftToRightInterval {
+/* Announcement Bar Left-to-Right Interval Animation (Never Clips on Mobile) */
+@keyframes announcementGlideLTR {
   0% {
-    transform: translateX(-80%);
+    transform: translateX(-24px);
     opacity: 0;
   }
-  15% {
-    transform: translateX(0%);
+  14% {
+    transform: translateX(0);
     opacity: 1;
   }
-  85% {
-    transform: translateX(0%);
+  86% {
+    transform: translateX(0);
     opacity: 1;
   }
   98% {
-    transform: translateX(80%);
+    transform: translateX(24px);
     opacity: 0;
   }
   100% {
-    transform: translateX(-80%);
+    transform: translateX(-24px);
     opacity: 0;
   }
 }
@@ -92,6 +93,37 @@
 .animate-announcement-ltr {
   display: inline-block;
   will-change: transform, opacity;
-  animation: moveLeftToRightInterval 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: announcementGlideLTR 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Hero Banner Modern Badge Card: Smooth Left-to-Right Interval Motion (Bounded for All Screen Sizes) */
+@keyframes badgeMoveLeftToRight {
+  0% {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+  14% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  86% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  98% {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+}
+
+.animate-badge-ltr {
+  display: inline-flex;
+  align-items: center;
+  will-change: transform, opacity;
+  animation: badgeMoveLeftToRight 4.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
