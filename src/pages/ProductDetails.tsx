@@ -6,7 +6,6 @@ import { Badge } from '../components/ui/Badge';
 import { formatCurrency, calculateDiscount } from '../utils/format';
 import { useCart } from '../hooks/useCart';
 import { productService } from '../services/productService';
-import NotFound from './NotFound';
 import toast from 'react-hot-toast';
 
 export default function ProductDetails() {
@@ -74,7 +73,15 @@ export default function ProductDetails() {
   }
 
   if (!product) {
-    return <NotFound />;
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center bg-slate-50 p-6 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h2>
+        <p className="text-gray-600 mb-6 max-w-md">The medication or healthcare product you are looking for is currently unavailable or may have been updated.</p>
+        <Link to="/shop">
+          <Button>Browse All Products</Button>
+        </Link>
+      </div>
+    );
   }
 
   const discount = calculateDiscount(product.price, product.previous_price);

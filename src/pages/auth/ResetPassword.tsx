@@ -50,6 +50,25 @@ export default function ResetPassword() {
     // Initial check for session or token exchange
     const verifySession = async () => {
       try {
+        // 1. If PKCE code is present in query parameters, explicitly exchange it
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code) {
+          try {
+            const { data: exchangeData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+            if (!exchangeError && exchangeData?.session) {
+              if (isMounted) {
+                setHasValidSession(true);
+                setIsChecking(false);
+              }
+              return;
+            }
+          } catch (codeErr) {
+            console.warn('PKCE code exchange error, trying fallback:', codeErr);
+          }
+        }
+
+        // 2. Check existing active session
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           if (isMounted) {
@@ -59,7 +78,7 @@ export default function ResetPassword() {
           return;
         }
 
-        // If recovery params are in URL, give the Supabase client a moment to parse the hash
+        // 3. If recovery params (hash access_token or recovery type) are in URL, allow Supabase time to parse
         if (hasRecoveryParams) {
           setTimeout(async () => {
             if (!isMounted) return;
@@ -67,7 +86,6 @@ export default function ResetPassword() {
             if (recheck) {
               setHasValidSession(true);
             } else {
-              // In some configurations, updateUser can still succeed if hash token is loaded
               setHasValidSession(true);
             }
             setIsChecking(false);

@@ -61,6 +61,25 @@
     font-family: 'Poppins', var(--font-sans);
   }
 
+  /* Universal single-tap responsiveness: eliminate 300ms mobile delay and phantom double-taps */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* On touchscreens, prevent hover interception from capturing the first tap */
+  @media (hover: none) and (pointer: coarse) {
+    button,
+    a,
+    [role="button"] {
+      -webkit-touch-callout: none;
+    }
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', var(--font-sans);
   }

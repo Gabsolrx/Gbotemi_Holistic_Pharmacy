@@ -49,14 +49,14 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
       
-      {/* Quick Actions (Hover) */}
-      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-4 group-hover:translate-x-0">
+      {/* Quick Actions (Hover - only active when visible) */}
+      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
         <button 
           type="button"
           onClick={handleWishlistClick}
           aria-label="Add to wishlist"
           title="Add to Wishlist"
-          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-accent-orange transition-colors cursor-pointer active:scale-90"
+          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-accent-orange transition-colors cursor-pointer touch-manipulation"
         >
           <Heart size={16} />
         </button>
@@ -65,7 +65,7 @@ export function ProductCard({ product }: ProductCardProps) {
           onClick={handleQuickView}
           aria-label="View product details"
           title="Quick View"
-          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-primary-600 transition-colors cursor-pointer active:scale-90"
+          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-primary-600 transition-colors cursor-pointer touch-manipulation"
         >
           <Eye size={16} />
         </button>

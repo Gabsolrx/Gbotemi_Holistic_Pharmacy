@@ -18,13 +18,11 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AccountLayout } from './components/account/AccountLayout';
 import { AdminLayout } from './components/admin/AdminLayout';
 import ScrollToTop from './components/layout/ScrollToTop';
-import AIChatWidget from './components/ui/AIChatWidget';
 
 // Core routes imported statically for instant response and zero chunk errors
 import PrescriptionUpload from './pages/PrescriptionUpload';
 import Consultation from './pages/Consultation';
 import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/Dashboard';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import ForgotPassword from './pages/auth/ForgotPassword';
@@ -62,11 +60,13 @@ const Orders = lazyWithRetry(() => import('./pages/account/Orders'));
 const Profile = lazyWithRetry(() => import('./pages/account/Profile'));
 const Wishlist = lazyWithRetry(() => import('./pages/account/Wishlist'));
 
+const AdminDashboard = lazyWithRetry(() => import('./pages/admin/Dashboard'));
 const AdminOrders = lazyWithRetry(() => import('./pages/admin/Orders'));
 const AdminProducts = lazyWithRetry(() => import('./pages/admin/Products'));
 const AdminCustomers = lazyWithRetry(() => import('./pages/admin/Customers'));
 const AdminBlog = lazyWithRetry(() => import('./pages/admin/Blog'));
 const AdminCMS = lazyWithRetry(() => import('./pages/admin/CMS'));
+const AIChatWidget = lazy(() => import('./components/ui/AIChatWidget'));
 
 const Contact = lazyWithRetry(() => import('./pages/Contact'));
 const HealthTools = lazyWithRetry(() => import('./pages/HealthTools'));
@@ -97,7 +97,9 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Toaster position="top-center" />
-      <AIChatWidget />
+      <Suspense fallback={null}>
+        <AIChatWidget />
+      </Suspense>
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Dedicated Admin Portal Routes */}

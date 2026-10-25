@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ShoppingBag, Search, Eye, AlertCircle, FileText, ExternalLink } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -39,17 +38,19 @@ export default function Orders() {
   );
 
   if (isLoading) {
-    return <div className="text-center py-12 text-gray-500">Loading orders...</div>;
+    return <div className="text-center py-12 text-gray-500 font-sans">Loading orders...</div>;
   }
 
   if (orders.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 font-sans">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">My Orders</h1>
         <div className="text-center py-16 border-2 border-dashed border-gray-200 rounded-xl text-gray-500">
-          <ShoppingBag className="mx-auto mb-4 text-gray-400" size={48} />
+          <span className="inline-block px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wider mb-3">
+            Empty Order History
+          </span>
           <h3 className="text-lg font-bold text-gray-900 mb-2">No orders yet</h3>
-          <p className="mb-6 max-w-sm mx-auto">When you place an order, it will appear here so you can track its status.</p>
+          <p className="mb-6 max-w-sm mx-auto text-sm">When you place an order, it will appear here so you can track its status.</p>
           <Link to="/shop">
             <Button>Browse Products</Button>
           </Link>
@@ -69,18 +70,17 @@ export default function Orders() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 font-sans">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
-        <div className="relative w-full sm:w-64">
+        <div className="w-full sm:w-64">
           <input 
             type="text" 
             placeholder="Search by order or product..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
-          <Search size={16} className="absolute left-3 top-2.5 text-gray-400" />
         </div>
       </div>
 
@@ -145,18 +145,16 @@ export default function Orders() {
 
                   return (
                     <div className="my-2 p-2.5 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-center justify-between text-xs">
-                      <span className="font-semibold text-emerald-900 flex items-center gap-1.5">
-                        <FileText size={14} className="text-emerald-700" />
-                        <span>Uploaded Receipt (Supabase):</span>
+                      <span className="font-semibold text-emerald-900">
+                        Uploaded Bank Receipt:
                       </span>
                       <a
                         href={receiptUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-bold text-primary-700 hover:text-primary-800 hover:underline inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-emerald-300 shadow-2xs"
+                        className="font-bold text-primary-700 hover:text-primary-800 hover:underline bg-white px-2.5 py-1 rounded border border-emerald-300 shadow-2xs touch-manipulation"
                       >
-                        <span>View Document</span>
-                        <ExternalLink size={11} />
+                        View Receipt Document
                       </a>
                     </div>
                   );
