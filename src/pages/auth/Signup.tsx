@@ -31,35 +31,57 @@ export default function Signup() {
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
     try {
-      // Create user via server API to bypass client-side rate limits
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const result = await res.json();
-      
-      if (!res.ok || result.error) {
-        toast.error(result.error || 'Failed to create account');
-        setIsLoading(false);
-        return;
+      let signupSuccess = false;
+      try {
+        // Create user via server API if backend server is available
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          const result = await res.json();
+          if (!result.error) {
+            signupSuccess = true;
+          }
+        }
+      } catch {
+        // Server API not reachable in static deployment (e.g. Vercel), fall back to client Supabase
+      }
+
+      if (!signupSuccess) {
+        const { error: supaError } = await supabase.auth.signUp({
+          email: data.email.trim(),
+          password: data.password,
+          options: {
+            data: {
+              first_name: data.firstName,
+              last_name: data.lastName,
+              phone: data.phone,
+            }
+          }
+        });
+        if (supaError) {
+          throw supaError;
+        }
       }
 
       // Automatically sign in the user now that the account is created
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: data.email.trim(),
         password: data.password
       });
 
-      if (error) {
-        toast.error('Account created, but automatic sign-in failed. Please log in.');
-        navigate('/login');
+      if (signInError) {
+        toast.success('Account created! Please sign in with your credentials.');
+        navigate('/customer-login');
       } else {
-        toast.success('Account created successfully!');
+        toast.success('Account created successfully! Welcome to Gbotemi Holistic Pharmacy.');
         navigate('/account');
       }
     } catch (error: any) {
-      toast.error('An unexpected error occurred. Please try again.');
+      console.error('Signup error:', error);
+      toast.error(error.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

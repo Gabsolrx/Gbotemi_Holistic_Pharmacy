@@ -7,7 +7,6 @@ import { LogIn, ArrowRight } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 const loginSchema = z.object({

@@ -25,33 +25,58 @@ import PrescriptionUpload from './pages/PrescriptionUpload';
 import Consultation from './pages/Consultation';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/Dashboard';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
-// Lazy loaded secondary routes
-const Login = lazy(() => import('./pages/auth/Login'));
-const Signup = lazy(() => import('./pages/auth/Signup'));
-const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
-const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+// Resilient lazy import that auto-reloads if a chunk fails due to new deployment
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  componentImport: () => Promise<{ default: T }>
+) {
+  return lazy(async () => {
+    try {
+      return await componentImport();
+    } catch (error: any) {
+      const isChunkError = 
+        error?.message?.includes('Failed to fetch dynamically imported module') ||
+        error?.message?.includes('Importing a module script failed') ||
+        error?.name === 'ChunkLoadError';
 
-const AccountDashboard = lazy(() => import('./pages/account/Dashboard'));
-const Orders = lazy(() => import('./pages/account/Orders'));
-const Profile = lazy(() => import('./pages/account/Profile'));
-const Wishlist = lazy(() => import('./pages/account/Wishlist'));
+      if (isChunkError && typeof window !== 'undefined') {
+        const lastReload = sessionStorage.getItem('chunk_retry_reload');
+        if (!lastReload || Date.now() - Number(lastReload) > 10000) {
+          sessionStorage.setItem('chunk_retry_reload', String(Date.now()));
+          window.location.reload();
+          return new Promise(() => {}) as Promise<{ default: T }>;
+        }
+      }
+      throw error;
+    }
+  });
+}
 
-const AdminOrders = lazy(() => import('./pages/admin/Orders'));
-const AdminProducts = lazy(() => import('./pages/admin/Products'));
-const AdminCustomers = lazy(() => import('./pages/admin/Customers'));
-const AdminBlog = lazy(() => import('./pages/admin/Blog'));
-const AdminCMS = lazy(() => import('./pages/admin/CMS'));
+// Lazy loaded secondary routes with auto-retry
+const AccountDashboard = lazyWithRetry(() => import('./pages/account/Dashboard'));
+const Orders = lazyWithRetry(() => import('./pages/account/Orders'));
+const Profile = lazyWithRetry(() => import('./pages/account/Profile'));
+const Wishlist = lazyWithRetry(() => import('./pages/account/Wishlist'));
 
-const Contact = lazy(() => import('./pages/Contact'));
-const HealthTools = lazy(() => import('./pages/HealthTools'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const Services = lazy(() => import('./pages/Services'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-const Categories = lazy(() => import('./pages/Categories'));
-const About = lazy(() => import('./pages/About'));
-const InfoPage = lazy(() => import('./pages/InfoPage'));
+const AdminOrders = lazyWithRetry(() => import('./pages/admin/Orders'));
+const AdminProducts = lazyWithRetry(() => import('./pages/admin/Products'));
+const AdminCustomers = lazyWithRetry(() => import('./pages/admin/Customers'));
+const AdminBlog = lazyWithRetry(() => import('./pages/admin/Blog'));
+const AdminCMS = lazyWithRetry(() => import('./pages/admin/CMS'));
+
+const Contact = lazyWithRetry(() => import('./pages/Contact'));
+const HealthTools = lazyWithRetry(() => import('./pages/HealthTools'));
+const Blog = lazyWithRetry(() => import('./pages/Blog'));
+const BlogPost = lazyWithRetry(() => import('./pages/BlogPost'));
+const Services = lazyWithRetry(() => import('./pages/Services'));
+const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
+const Categories = lazyWithRetry(() => import('./pages/Categories'));
+const About = lazyWithRetry(() => import('./pages/About'));
+const InfoPage = lazyWithRetry(() => import('./pages/InfoPage'));
 
 function PageLoader() {
   return (
@@ -163,13 +188,18 @@ export default function App() {
             <Route path="blog/:id" element={<BlogPost />} />
             <Route path="services" element={<Services />} />
             
-            {/* Auth Routes */}
-            <Route path="login" element={<AdminLogin />} />
+            {/* Customer Auth Routes */}
+            <Route path="login" element={<Login />} />
             <Route path="customer-login" element={<Login />} />
             <Route path="user-login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
+            <Route path="user-signup" element={<Signup />} />
+            <Route path="customer-signup" element={<Signup />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
+
+            {/* Direct Admin Access - only accessible via /admin or /admin/login */}
+            <Route path="admin/login" element={<AdminLogin />} />
 
             {/* Account Routes */}
             <Route path="account" element={
