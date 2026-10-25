@@ -246,7 +246,6 @@ Always provide clear guidance and helpful clickable markdown links to relevant s
 8. Delivery: Fast doorstep delivery across Osun State and interstate delivery across Nigeria. Free delivery on orders above ₦10,000! See [Delivery Information](/delivery-information).
 9. Contact & Support: [Contact Us](/contact), or chat directly with our pharmacy team via WhatsApp (+234 802 966 0153) or email gbotemihpharmacy@gmail.com.
 10. Customer Account: [My Account](/account) & [Order History](/account/orders) for order tracking.
-11. Admin Dashboard: [Admin Portal](/admin) for authorized staff.
 
 [COMMUNICATION STYLE]
 Warm, compassionate, professional, and clear. Format key suggestions with clean bullet points and direct markdown links.`,

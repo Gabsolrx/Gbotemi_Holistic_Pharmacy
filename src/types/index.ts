@@ -1,14 +1,47 @@
-export type UserRole = 'customer' | 'pharmacist' | 'admin' | 'super_admin';
+export type UserRole = 'customer' | 'admin' | 'super_admin' | 'pharmacist';
 
 export interface User {
   id: string;
   email: string;
   role: UserRole;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  createdAt: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  createdAt?: string;
 }
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  brand: string;
+  genericName?: string;
+  generic_name?: string;
+  description: string;
+  price: number;
+  previousPrice?: number;
+  previous_price?: number;
+  rating?: number;
+  stockQuantity: number;
+  stock_quantity?: number;
+  lowStockThreshold?: number;
+  low_stock_threshold?: number;
+  prescriptionRequired: boolean;
+  prescription_required?: boolean;
+  pharmacistReviewRequired?: boolean;
+  active: boolean;
+  featured: boolean;
+  imageUrl: string;
+  image_url?: string;
+  category: string;
+  categoryId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  strength?: string;
+  packSize?: string;
+}
+
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 export interface OrderItem {
   id: string;
@@ -16,68 +49,35 @@ export interface OrderItem {
   name: string;
   price: number;
   quantity: number;
+  imageUrl?: string;
 }
-
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 export interface Order {
   id: string;
-  userId: string;
+  userId?: string;
   customerName: string;
   customerEmail: string;
   customerPhone?: string;
-  deliveryMethod?: string;
-  paymentStatus?: 'pending' | 'confirmed' | 'refunded';
-  paymentConfirmedAt?: string;
-  paymentReference?: string;
-  receiptUrl?: string;
   items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
   shippingAddress: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface PaymentConfirmationRecord {
-  id: string;
-  orderId: string;
-  customerName: string;
-  customerPhone: string;
-  amount: number;
-  messageText: string;
+  deliveryMethod?: string;
+  deliveryMethodName?: string;
+  paymentMethod?: string;
+  paymentStatus?: string;
+  paymentReference?: string;
+  paymentConfirmed?: boolean;
+  paymentConfirmedAt?: string;
   confirmedBy?: string;
-  confirmedAt: string;
-}
-
-export interface Product {
-
-  id: string;
-  name: string;
-  slug: string;
-  brand: string;
-  genericName?: string;
-  strength?: string;
-  dosageForm?: string;
-  packSize?: string;
-  description: string;
-  composition?: string;
-  directions?: string;
-  warnings?: string;
-  storage?: string;
-  price: number;
-  previousPrice?: number;
-  discountPercentage?: number;
-  rating: number;
-  stockQuantity: number;
-  lowStockThreshold: number;
-  prescriptionRequired: boolean;
-  pharmacistReviewRequired: boolean;
-  active: boolean;
-  featured: boolean;
-  imageUrl: string;
-  categoryId: string;
-  category?: string;
+  receiptUrl?: string;
+  prescriptionUrl?: string;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
 }
