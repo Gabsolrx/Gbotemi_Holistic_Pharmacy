@@ -83,7 +83,7 @@ Check out our [Free Health Tools](/health-tools) to use our:
 - Medication Refill Reminder scheduler`;
     }
     if (q.includes('admin') || q.includes('dashboard') || q.includes('staff')) {
-      return `Authorized pharmacy staff can access the administrative portal at [Admin Dashboard](/admin) or [Admin Login](/admin/login).`;
+      return `For administrative assistance or staff inquiries, please contact our pharmacy management directly at [Contact Us](/contact) or via phone at [+234 802 966 0153](tel:+2348029660153).`;
     }
     return `Welcome to Gbotemi Holistic Pharmacy!
 

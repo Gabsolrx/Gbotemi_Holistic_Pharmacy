@@ -123,41 +123,53 @@ const DEFAULT_SLIDES_DISPLAY: HeroSlideDisplay[] = [
 
 interface HeroBottomBadgeItem {
   title: string;
+  tabletTitle: string;
   mobileTitle: string;
   subtitle: string;
+  tabletSubtitle: string;
   mobileSubtitle: string;
 }
 
 const HERO_BOTTOM_BADGES: HeroBottomBadgeItem[] = [
   {
     title: '100% Genuine Care',
+    tabletTitle: '100% Genuine Care',
     mobileTitle: '100% Genuine',
     subtitle: 'NAFDAC Regulated & Sourced From Certified Manufacturers',
-    mobileSubtitle: 'NAFDAC Regulated & Certified',
+    tabletSubtitle: 'NAFDAC Regulated & Certified Stock',
+    mobileSubtitle: 'NAFDAC Regulated Stock',
   },
   {
     title: 'Same-Day Dispatch',
-    mobileTitle: 'Same-Day Dispatch',
+    tabletTitle: 'Same-Day Dispatch',
+    mobileTitle: 'Fast Dispatch',
     subtitle: 'Fast Courier in Osogbo, Ede & Nationwide Waybill Transit',
-    mobileSubtitle: 'Fast Courier in Osogbo & Nationwide',
+    tabletSubtitle: 'Courier Delivery in Osogbo & Nationwide',
+    mobileSubtitle: 'Express Delivery Available',
   },
   {
     title: 'Licensed Pharmacists',
+    tabletTitle: 'Licensed Pharmacists',
     mobileTitle: 'Licensed Care',
     subtitle: 'Professional Clinical Guidance & Dosage Consultation',
-    mobileSubtitle: 'Expert Clinical Guidance & Advice',
+    tabletSubtitle: 'Professional Clinical Guidance & Advice',
+    mobileSubtitle: 'Expert Health Guidance',
   },
   {
     title: 'Cold-Chain Assured',
+    tabletTitle: 'Cold-Chain Assured',
     mobileTitle: 'Cold-Chain',
     subtitle: 'Safe Temperature Preservation for Sensitive Medications',
-    mobileSubtitle: 'Safe Temperature Preservation',
+    tabletSubtitle: 'Safe Temperature Storage Guaranteed',
+    mobileSubtitle: 'Safe Temperature Preserved',
   },
   {
     title: 'Encrypted & Confidential',
-    mobileTitle: 'Encrypted Care',
+    tabletTitle: 'Confidential Care',
+    mobileTitle: 'Confidential Care',
     subtitle: 'Direct Superintendent Pharmacist Prescription Review',
-    mobileSubtitle: 'Confidential Pharmacist Review',
+    tabletSubtitle: 'Pharmacist Prescription Review',
+    mobileSubtitle: 'Safe Pharmacist Review',
   },
 ];
 
@@ -419,20 +431,22 @@ export function PharmacyHeroCarousel() {
                 })}
 
                 {/* Well-Designed Modern Card at the Bottom of Hero Banner Image */}
-                <div className="absolute bottom-2.5 sm:bottom-5 inset-x-2.5 sm:inset-x-5 md:inset-x-8 z-20 pointer-events-none">
-                  <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/95 shadow-xl shadow-emerald-950/20 px-2.5 py-2 sm:px-4 sm:py-3 md:px-5 md:py-3.5 overflow-hidden">
-                    <div className="relative overflow-hidden w-full flex items-center justify-center min-h-[30px] sm:min-h-[38px] md:min-h-[44px]">
+                <div className="absolute bottom-2.5 sm:bottom-4 md:bottom-5 inset-x-3 sm:inset-x-5 md:inset-x-8 z-20 pointer-events-none">
+                  <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/95 shadow-xl shadow-emerald-950/20 px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-3.5 overflow-hidden">
+                    <div className="relative overflow-hidden w-full flex items-center justify-center min-h-[30px] sm:min-h-[36px] md:min-h-[42px]">
                       <div
                         key={badgeIndex}
-                        className="animate-badge-ltr flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 max-w-full text-left"
+                        className="animate-badge-fade flex items-center justify-center gap-1.5 sm:gap-2.5 md:gap-3.5 max-w-full text-left"
                       >
-                        <span className="text-[11px] sm:text-xs md:text-sm font-bold text-[#047857] uppercase tracking-wide bg-[#ECFDF5] px-2 sm:px-3.5 py-0.5 sm:py-1.5 rounded-lg sm:rounded-xl border border-[#047857]/20 shrink-0 shadow-2xs font-sans whitespace-nowrap">
+                        <span className="text-[10px] sm:text-xs md:text-sm font-bold text-[#047857] uppercase tracking-wide bg-[#ECFDF5] px-2 sm:px-3 py-0.5 sm:py-1 rounded-md sm:rounded-lg border border-[#047857]/20 shrink-0 shadow-2xs font-sans whitespace-nowrap">
                           <span className="sm:hidden">{HERO_BOTTOM_BADGES[badgeIndex].mobileTitle}</span>
-                          <span className="hidden sm:inline">{HERO_BOTTOM_BADGES[badgeIndex].title}</span>
+                          <span className="hidden sm:inline lg:hidden">{HERO_BOTTOM_BADGES[badgeIndex].tabletTitle}</span>
+                          <span className="hidden lg:inline">{HERO_BOTTOM_BADGES[badgeIndex].title}</span>
                         </span>
-                        <span className="text-[11px] sm:text-xs md:text-sm text-[#17231E] font-semibold truncate font-sans min-w-0">
+                        <span className="text-[10px] sm:text-xs md:text-sm text-[#17231E] font-semibold truncate font-sans min-w-0 pr-1">
                           <span className="sm:hidden">{HERO_BOTTOM_BADGES[badgeIndex].mobileSubtitle}</span>
-                          <span className="hidden sm:inline">{HERO_BOTTOM_BADGES[badgeIndex].subtitle}</span>
+                          <span className="hidden sm:inline lg:hidden">{HERO_BOTTOM_BADGES[badgeIndex].tabletSubtitle}</span>
+                          <span className="hidden lg:inline">{HERO_BOTTOM_BADGES[badgeIndex].subtitle}</span>
                         </span>
                       </div>
                     </div>

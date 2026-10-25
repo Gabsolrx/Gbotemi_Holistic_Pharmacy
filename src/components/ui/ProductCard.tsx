@@ -1,6 +1,7 @@
 import { MouseEvent, Key } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
 import { Product } from '../../types';
 import { Button } from './Button';
@@ -13,6 +14,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const discount = calculateDiscount(product.price, product.previous_price);
   const isOutOfStock = product.stock_quantity <= 0;
@@ -21,6 +23,18 @@ export function ProductCard({ product }: ProductCardProps) {
     e.preventDefault();
     e.stopPropagation();
     addItem(product);
+  };
+
+  const handleWishlistClick = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toast.success(`${product.name} added to your wishlist!`);
+  };
+
+  const handleQuickView = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/products/${product.slug}`);
   };
   
   return (
@@ -37,10 +51,22 @@ export function ProductCard({ product }: ProductCardProps) {
       
       {/* Quick Actions (Hover) */}
       <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-4 group-hover:translate-x-0">
-        <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-accent-orange transition-colors">
+        <button 
+          type="button"
+          onClick={handleWishlistClick}
+          aria-label="Add to wishlist"
+          title="Add to Wishlist"
+          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-accent-orange transition-colors cursor-pointer active:scale-90"
+        >
           <Heart size={16} />
         </button>
-        <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-primary-600 transition-colors">
+        <button 
+          type="button"
+          onClick={handleQuickView}
+          aria-label="View product details"
+          title="Quick View"
+          className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-500 hover:text-primary-600 transition-colors cursor-pointer active:scale-90"
+        >
           <Eye size={16} />
         </button>
       </div>

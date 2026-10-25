@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, User, Heart, Menu, Phone, Mail, ShieldCheck, X } from 'lucide-react';
+import { Search, ShoppingCart, User, Heart, Menu, Phone, Mail, X } from 'lucide-react';
 import { useCart } from '../../hooks/useCart';
 import { useAuth } from '../../hooks/useAuth';
 import { cmsService, CmsConfig } from '../../services/cmsService';
@@ -45,11 +45,19 @@ export default function Header() {
 
   const activeAnnouncement = announcementsList[currentAnnouncementIndex % announcementsList.length] || announcementsList[0];
 
-  // Clean mobile text helper to prevent any text cutting off on narrow phone screens
+  // Clean mobile & tablet text helpers to guarantee no text cuts off or collides with screen edges
   const getMobileAnnouncement = (text: string): string => {
     if (!text) return '';
-    // If the text contains the bullet divider, take the punchy first section for mobile
     if (text.includes('•')) {
+      return text.split('•')[0].trim();
+    }
+    return text;
+  };
+
+  const getTabletAnnouncement = (text: string): string => {
+    if (!text) return '';
+    // On tablet, ensure text fits nicely alongside right-aligned contact details without wrapping or clipping
+    if (text.length > 50 && text.includes('•')) {
       return text.split('•')[0].trim();
     }
     return text;
@@ -90,18 +98,22 @@ export default function Header() {
       {/* Announcement Bar — Fully responsive across all devices and mobile screens without clipping */}
       {(!cmsConfig || cmsConfig.storeSettings.announcementEnabled) && (
         <div className="w-full bg-primary-800 text-white text-xs sm:text-sm py-1.5 sm:py-2 overflow-hidden border-b border-primary-700/50">
-          <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-1.5 sm:gap-2">
-            <div className="overflow-hidden w-full sm:max-w-xl xl:max-w-2xl text-center sm:text-left py-0.5 px-1 min-w-0 flex items-center justify-center sm:justify-start">
+          <div className="max-w-7xl 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-1.5 sm:gap-2">
+            <div className="overflow-hidden w-full flex-1 text-center sm:text-left py-0.5 px-1 min-w-0 flex items-center justify-center sm:justify-start">
               <div
                 key={currentAnnouncementIndex}
-                className="animate-announcement-ltr font-medium text-[11px] sm:text-xs md:text-sm text-emerald-50 text-center sm:text-left max-w-full"
+                className="animate-announcement-fade font-medium text-[11px] sm:text-xs md:text-sm text-emerald-50 text-center sm:text-left max-w-full"
               >
-                {/* On mobile screens, display clean, punchy message that never clips edges */}
+                {/* On mobile screens, display clean, punchy message with safe margins */}
                 <span className="sm:hidden block px-1 text-center font-semibold tracking-wide">
                   {getMobileAnnouncement(activeAnnouncement)}
                 </span>
-                {/* On tablet, desktop, and large displays, show full announcement text */}
-                <span className="hidden sm:inline-block whitespace-nowrap">
+                {/* On tablet displays, display tailored message that never collides with screen edges */}
+                <span className="hidden sm:inline-block lg:hidden">
+                  {getTabletAnnouncement(activeAnnouncement)}
+                </span>
+                {/* On desktop and large displays, show full announcement text */}
+                <span className="hidden lg:inline-block">
                   {activeAnnouncement}
                 </span>
               </div>
@@ -147,12 +159,6 @@ export default function Header() {
 
             {/* Action Icons */}
             <div className="flex items-center gap-4 sm:gap-6 text-gray-700">
-              {(user?.role === 'admin' || user?.role === 'super_admin') && (
-                <Link to="/admin" className="hidden sm:flex flex-col items-center text-primary-600 hover:text-primary-800 transition-colors">
-                  <ShieldCheck size={24} />
-                  <span className="text-xs mt-1 font-bold">Admin</span>
-                </Link>
-              )}
               <Link to="/account/wishlist" className="hidden sm:flex flex-col items-center hover:text-primary-700 transition-colors relative">
                 <Heart size={24} />
                 <span className="absolute -top-1 -right-1 bg-accent-orange text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
@@ -265,16 +271,6 @@ export default function Header() {
                   <Heart size={20} />
                   <span>Wishlist</span>
                 </Link>
-                {(user?.role === 'admin' || user?.role === 'super_admin') && (
-                  <Link 
-                    to="/admin" 
-                    className="flex items-center gap-3 text-primary-600 hover:text-primary-800"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <ShieldCheck size={20} />
-                    <span>Admin Dashboard</span>
-                  </Link>
-                )}
               </li>
             </ul>
           </nav>

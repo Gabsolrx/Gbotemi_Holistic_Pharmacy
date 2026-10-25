@@ -17,6 +17,7 @@ import CheckoutSuccess from './pages/CheckoutSuccess';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AccountLayout } from './components/account/AccountLayout';
 import { AdminLayout } from './components/admin/AdminLayout';
+import ScrollToTop from './components/layout/ScrollToTop';
 import AIChatWidget from './components/ui/AIChatWidget';
 
 // Core routes imported statically for instant response and zero chunk errors
@@ -69,6 +70,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-center" />
       <AIChatWidget />
       <Suspense fallback={<PageLoader />}>

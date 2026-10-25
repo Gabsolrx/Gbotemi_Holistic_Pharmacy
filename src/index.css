@@ -66,64 +66,59 @@
   }
 }
 
-/* Announcement Bar Left-to-Right Interval Animation (Never Clips on Mobile) */
-@keyframes announcementGlideLTR {
+/* Announcement Bar Smooth Fade Animation (Zero horizontal drift, never clips on mobile or tablet) */
+@keyframes announcementFadeSmooth {
   0% {
-    transform: translateX(-24px);
+    transform: translateY(4px);
     opacity: 0;
   }
-  14% {
-    transform: translateX(0);
+  12% {
+    transform: translateY(0);
     opacity: 1;
   }
-  86% {
-    transform: translateX(0);
+  88% {
+    transform: translateY(0);
     opacity: 1;
-  }
-  98% {
-    transform: translateX(24px);
-    opacity: 0;
   }
   100% {
-    transform: translateX(-24px);
+    transform: translateY(-4px);
     opacity: 0;
   }
 }
 
+.animate-announcement-fade,
 .animate-announcement-ltr {
   display: inline-block;
   will-change: transform, opacity;
-  animation: announcementGlideLTR 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: announcementFadeSmooth 5.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
-/* Hero Banner Modern Badge Card: Smooth Left-to-Right Interval Motion (Bounded for All Screen Sizes) */
-@keyframes badgeMoveLeftToRight {
+/* Hero Banner Modern Badge Card: Smooth Vertical Micro-Glide & Fade (Zero horizontal drift, strictly bounded for mobile & tablet) */
+@keyframes badgeVerticalFade {
   0% {
-    transform: translateX(-12px);
+    transform: translateY(4px);
     opacity: 0;
   }
   14% {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
   86% {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
-  98% {
-    transform: translateX(12px);
-    opacity: 0;
-  }
   100% {
-    transform: translateX(-12px);
+    transform: translateY(-4px);
     opacity: 0;
   }
 }
 
+.animate-badge-fade,
 .animate-badge-ltr {
   display: inline-flex;
   align-items: center;
   will-change: transform, opacity;
-  animation: badgeMoveLeftToRight 4.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: badgeVerticalFade 3.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
+
 

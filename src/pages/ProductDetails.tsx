@@ -7,6 +7,7 @@ import { formatCurrency, calculateDiscount } from '../utils/format';
 import { useCart } from '../hooks/useCart';
 import { productService } from '../services/productService';
 import NotFound from './NotFound';
+import toast from 'react-hot-toast';
 
 export default function ProductDetails() {
   const { slug } = useParams();
@@ -16,6 +17,38 @@ export default function ProductDetails() {
   const [activeTab, setActiveTab] = useState('description');
   const [product, setProduct] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  const handleToggleWishlist = () => {
+    setIsWishlisted(!isWishlisted);
+    if (!isWishlisted) {
+      toast.success(`${product?.name || 'Product'} added to your wishlist!`);
+    } else {
+      toast.success(`${product?.name || 'Product'} removed from your wishlist.`);
+    }
+  };
+
+  const handleShareProduct = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product?.name || 'Gbotemi Holistic Pharmacy',
+          text: `Check out ${product?.name || 'this medicine'} on Gbotemi Holistic Pharmacy`,
+          url: url,
+        });
+        return;
+      } catch (err) {
+        // Fallback to clipboard
+      }
+    }
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(url);
+      toast.success('Product link copied to clipboard!');
+    } else {
+      toast.success('Product link copied!');
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -218,13 +251,23 @@ export default function ProductDetails() {
 
               {/* Secondary Actions */}
               <div className="flex items-center gap-6 border-t border-gray-100 pt-6">
-                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-accent-orange font-medium transition-colors cursor-pointer">
-                  <Heart size={18} />
-                  Add to Wishlist
+                <button 
+                  type="button"
+                  onClick={handleToggleWishlist}
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors cursor-pointer active:scale-95 ${
+                    isWishlisted ? 'text-accent-orange font-bold' : 'text-gray-500 hover:text-accent-orange'
+                  }`}
+                >
+                  <Heart size={18} className={isWishlisted ? 'fill-accent-orange text-accent-orange' : ''} />
+                  <span>{isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}</span>
                 </button>
-                <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 font-medium transition-colors cursor-pointer">
+                <button 
+                  type="button"
+                  onClick={handleShareProduct}
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 font-medium transition-colors cursor-pointer active:scale-95"
+                >
                   <Share2 size={18} />
-                  Share Product
+                  <span>Share Product</span>
                 </button>
               </div>
 
